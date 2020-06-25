@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <div class="progress mb-3">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%"></div>
+  </div>
+  <h2 class="mb-3">{{ quiz.name }}</h2>
+
+  <p class="lead">{{ question.description }}</p>
+  <p class="lead">  dowenload compt-rendu    <a href="{%  url 'students:pdf_view' question.id %}" target="_blank"> click hir </a>  </p>
+
+
+
+
+ {% if quiz.type_tp == 'RC' %}
+    <div class = 'hemidi_centre' >
+      <svg  id = 'svg_srcuit_rc' height="300" width="300">
+                    <!-- resistance -->
+                    <text  id="resistance"  x="30" y="132" >10</text>
+                    <line id = 'ln8' x1="0" y1="150" x2="100" y2="150" style="stroke:rgb(0,0,255);stroke-width:2" />
+                    <rect x = "20" y = "140"  width="60" height="20" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" onclick="agm_ca()" />
+
+                    <path  id = 'agm_r' d="M 100,125 80,135 80,115 z" onclick="agm('r')"  />
+                    <path   id = 'sub_r'  d="M 0,125 20,135 20,115 z" onclick="sub('r')"   />
+
+
+
+                    <!-- line -->
+                    <line  id = 'ln1'  x1="100" y1="150" x2="150" y2="150" style="stroke:rgb(0,0,255);stroke-width:2" />
+                    <line id = 'ln2'  x1="250" y1="250" x2="0" y2="250" style="stroke:rgb(0,0,255);stroke-width:2" />
+                    <line id = 'ln3' x1="0" y1="250" x2="0" y2="150" style="stroke:rgb(0,0,255);stroke-width:2" />
+                  <!-- capacité -->
+                    <line id = 'ln4'  x1="250" y1="150" x2="250" y2="190" style="stroke:rgb(0,0,255);stroke-width:2" />
+                    <line id = 'ln5' x1="250" y1="205" x2="250" y2="250" style="stroke:rgb(0,0,255);stroke-width:2" />
+                    <rect x = "240" y = "190"  width="20" height="5" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+                    <rect x = "240" y = "205"  width="20" height="5" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+                   <text id = 'capa' x="260" y="205"  >10</text>
+                    <path  id = 'agm_c'  d="M 275,170 285,190 265,190 z"  onclick="agm('c')" />
+                    <path  id = 'sub_c'  d="M 275,230 285,210 265,210 z"  onclick="sub('c')" />
+                    <script>
+                    function agm(typ) {
+                    // exemple valeur c1 c2 c3 r1 r2
+                    // c1 < c2 < c3 et r1 < r2 et c1+c2 != c3
+                    var c1 = 10 ;
+                    var c2 = 50 ;
+                    var c3 = 70 ;
+                    var r1 = 10 ;
+                    var r2 = 50 ;
+                    if (typ == 'c'){
+
+                                    var x = document.getElementById("capa").textContent;
+                                   if (x == c1) {
+                                          document.getElementById("capa").innerHTML = c2 ; // change valeur
+                                          }
+                                   if (x == c2) {
+                                          document.getElementById("capa").innerHTML = c3 ; // change valeur
+                                          }
+                                   if (x == c3  ) {
+                                          document.getElementById("capa").innerHTML = c2+c1 ; // change valeur
+                                          }
+                                   if (x == c2+c1) {
+                                          document.getElementById("capa").innerHTML = c1+c3 ; // change valeur
+                                          }
+                                   if (x == c1+c3) {
+                                          document.getElementById("capa").innerHTML = c2+c3 ; // change valeur
+                                          }
+                                   if (x == c2+c3) {
+                                          document.getElementById("capa").innerHTML = c2+c3+c1 ; // change valeur
+                                          }
+                                         }
+                    if (typ == 'r'){
+
+                                    var x = document.getElementById("resistance").textContent;
+                                    var num = Number((r1*r2)/(r1+r2))
+
+                                   if ((r1*r2)/(r1+r2) < r1 && x == num.toFixed(2) ){
+                                    document.getElementById("resistance").innerHTML = r1
+                                   }
+                                   if (x == r1) {
+                                          document.getElementById("resistance").innerHTML = r2 ; // change valeur
+                                          }
+                                   if (x == r2 && (r1*r2)/(r1+r2) > r2 ) {
+                                          var num = Number((r1*r2)/(r1+r2))
+                                          document.getElementById("resistance").innerHTML = num.toFixed(2) // change valeur
+                                          }
+                                         }
+
+                                         }
+                    function sub(typ) {
+                    var c1 = 10 ;
+                    var c2 = 50 ;
+                    var c3 = 70 ;
+                    var r1 = 10 ;
+                    var r2 = 50 ;
+                    if(typ == 'c'){
+
+                                    var x = document.getElementById("capa").textContent;
+                                    if (x == c2+c3+c1) {
+                                          document.getElementById("capa").innerHTML = c3+c2 ; // change valeur
+                                          }
+                                   if (x == c2+c3) {
+                                          document.getElementById("capa").innerHTML = c1+c3 ; // change valeur
+                                          }
+                                   if (x == c1+c3) {
+                                          document.getElementById("capa").innerHTML = c3 ; // change valeur
+                                          }
+                                   if (x == c3  ) {
+                                          document.getElementById("capa").innerHTML = c2 ; // change valeur
+                                          }
+                                   if (x == c2) {
+                                          document.getElementById("capa").innerHTML = c1 ; // change valeur
+                                          }}
+                    if(typ == 'r'){
+                                    var x = document.getElementById("resistance").textContent;
+                                    if (x == r1 && (r1*r2)/(r1+r2) < r1 ){
+                                          var num = Number((r1*r2)/(r1+r2))
+                                          document.getElementById("resistance").innerHTML =  num.toFixed(2) ; // change valeur
+                                          }
+                                   if (x == r2) {
+                                          document.getElementById("resistance").innerHTML = r1 ; // change valeur
+                                          }
+                                   if (x == r2 && (r1*r2)/(r1+r2) > r1 ){
+                                          var num = Number((r1*r2)/(r1+r2))
+                                          document.getElementById("resistance").innerHTML =  num.toFixed(2) ; // change valeur
+                                          }
+                                    if ((r1*r2)/(r1+r2) > r2  && x == (r1*r2)/(r1+r2) ){
+                                          document.getElementById("resistance").innerHTML = r2 ; // change valeur
+                                          }
+
+                                   }
+
+                                         }
+                    </script>
+
+                  <!-- switsh -->
+                    <line id = 'ln6' x1="150" y1="150" x2="185" y2="150" style="stroke:rgb(0,0,255);stroke-width:2"  onclick = "myfnc_switch()" />
+                    <line id = 'ln7'  x1="215" y1="150" x2="250" y2="150" style="stroke:rgb(0,0,255);stroke-width:2" onclick = "myfnc_switch()" />
+                    <circle cx="185" cy="150" r="3" stroke="black" stroke-width="3" fill="red"    onclick = "myfnc_switch()" />
+                    <circle cx="215" cy="150" r="3" stroke="black" stroke-width="3" fill="red"    onclick = "myfnc_switch()"  />
+                    <line id = 'switch1' x1="185" y1="150" x2="211" y2="125" style="stroke:rgb(0,0,255);stroke-width:2"  onclick = "myfnc_switch()"  />
+                    <circle id = 'switch_c' cx="215" cy="123" r="3" stroke="black" stroke-width="3" fill="red"    onclick = "myfnc_switch()" />
+</svg>
+
+
+
+      <script>
+      function myfnc(nombre) {
+
+        var x = document.getElementById("resistance").textContent;
+
+        var tenure = prompt("Please enter valeur resestance Ω ", x);
+
+        if (tenure != null) {
+          alert("You have entered " + tenure  );
+          document.getElementById("resistance").innerHTML = tenure + 'Ω' ; // change valeur
+          } }
+
+        function myfnc_switch(nombre){
+        //sdocument.write(Date());
+
+
+        //document.getElementById("#switch").y2 = "50";
+        //document.getElementById("#switch_c").cy = "50";
+         //$('#switch').attr('y2', "50");
+         var x1 = document.getElementById("switch1").getAttribute("y2")
+         if (x1 == 125){
+         document.getElementById("switch1").setAttribute("y2", "150");
+         document.getElementById("switch_c").setAttribute("cy", "150");
+         var stl_red ="stroke:rgb(255,0,0);stroke-width:2"
+         document.getElementById("ln1").setAttribute("style",stl_red);
+         document.getElementById("ln2").setAttribute("style",stl_red);
+         document.getElementById("ln3").setAttribute("style", stl_red);
+         document.getElementById("ln4").setAttribute("style",stl_red);
+         document.getElementById("ln5").setAttribute("style",stl_red);
+         document.getElementById("ln6").setAttribute("style",stl_red);
+         document.getElementById("ln7").setAttribute("style",stl_red);
+         document.getElementById("ln8").setAttribute("style",stl_red);
+         document.getElementById("switch1").setAttribute("style",stl_red);
+                                                                         }
+        else {
+          document.getElementById("switch1").setAttribute("y2", "125");
+          document.getElementById("switch_c").setAttribute("cy", "123");
+          var stl_red ="stroke:rgb(0,0,255);stroke-width:2"
+          document.getElementById("ln1").setAttribute("style",stl_red);
+          document.getElementById("ln2").setAttribute("style",stl_red);
+          document.getElementById("ln3").setAttribute("style", stl_red);
+          document.getElementById("ln4").setAttribute("style",stl_red);
+          document.getElementById("ln5").setAttribute("style",stl_red);
+          document.getElementById("ln6").setAttribute("style",stl_red);
+          document.getElementById("ln7").setAttribute("style",stl_red);
+          document.getElementById("ln8").setAttribute("style",stl_red);
+          document.getElementById("switch1").setAttribute("style",stl_red);
+
+        } }
+
+</script>
+
+    </div>
+{% endif %}
+  <p class="lead">{{ quiz.type_tp}}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Next →</button>
+  </form>
+{% endblock %}

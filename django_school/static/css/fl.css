@@ -1,0 +1,22 @@
+
+
+#agm_r:hover{
+    fill:red;
+    stroke:red;
+    pointer-events:all;
+}
+#agm_c:hover{
+    fill:red;
+    stroke:red;
+    pointer-events:all;
+}
+#sub_r:hover{
+    fill:blue;
+    stroke:red;
+    pointer-events:all;
+}
+#sub_c:hover{
+    fill:blue;
+    stroke:red;
+    pointer-events:all;
+}
