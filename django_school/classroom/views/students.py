@@ -16,6 +16,8 @@ from ..models import Quiz, Student, TakenQuiz, User, Question
 import os
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse
+import requests as RG
+
 
 
 class StudentSignUpView(CreateView):
@@ -96,7 +98,8 @@ def take_quiz(request, pk):
 
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)
-        if form.is_valid():
+
+        if form.is_valid() or True:
             with transaction.atomic():
                 student_answer = form.save(commit=False)
                 student_answer.student = student
@@ -144,6 +147,8 @@ class Compt_rendu(TemplateView ):
 def pdf_view(request, id):
     all_postes_ = Question.objects.get(id=id)
     #print(all_postes_.fiche_tp)
+    p = request.POST.get('variable')
+    print(p)
 
     contax = {
         'all_post': all_postes_,
@@ -156,10 +161,68 @@ def pdf_view(request, id):
 
     path_pdf =  your_media_root  + '/' + str(all_postes_.fiche_tp)
 
-    print(your_media_root)
+    #print(your_media_root)
     try:
         return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
     except FileNotFoundError:
         raise Http404('not found')
 
 
+@login_required
+@student_required
+def get_vr(request, id , r):
+
+    print('yes' , r)
+
+    return render(request, 'classroom/students/loadig.html')
+
+
+
+
+############## coper
+"""
+@login_required
+@student_required
+def take_quiz(request, pk):
+    quiz = get_object_or_404(Quiz, pk=pk)
+    student = request.user.student
+
+    if student.quizzes.filter(pk=pk).exists():
+        return render(request, 'students/taken_quiz.html')
+
+    total_questions = quiz.questions.count()
+    unanswered_questions = student.get_unanswered_questions(quiz)
+    total_unanswered_questions = unanswered_questions.count()
+    progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
+    question = unanswered_questions.first()
+
+    if request.method == 'POST':
+        form = TakeQuizForm(question=question, data=request.POST)
+        if form.is_valid():
+            with transaction.atomic():
+                student_answer = form.save(commit=False)
+                student_answer.student = student
+                student_answer.save()
+                if student.get_unanswered_questions(quiz).exists():
+                    return redirect('students:take_quiz', pk)
+                else:
+                    correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
+                    score = round((correct_answers / total_questions) * 100.0, 2)
+                    TakenQuiz.objects.create(student=student, quiz=quiz, score=score)
+                    if score < 50.0:
+                        messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
+                    else:
+                        messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
+                    return redirect('students:quiz_list')
+    else:
+        form = TakeQuizForm(question=question)
+
+    return render(request, 'classroom/students/take_quiz_form.html', {
+        'quiz': quiz,
+        'question': question,
+        'form': form,
+        'progress': progress
+    })
+
+
+"""

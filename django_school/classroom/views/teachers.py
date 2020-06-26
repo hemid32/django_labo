@@ -48,7 +48,7 @@ class QuizListView(ListView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizCreateView(CreateView):
     model = Quiz
-    fields = ('name', 'subject','type_tp' )
+    fields = ('name', 'subject','type_tp', 'module')
     template_name = 'classroom/teachers/quiz_add_form.html'
 
     def form_valid(self, form):
@@ -62,7 +62,7 @@ class QuizCreateView(CreateView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizUpdateView(UpdateView):
     model = Quiz
-    fields = ('name', 'subject', 'type_tp' )
+    fields = ('name', 'subject', 'type_tp' , 'module' )
     context_object_name = 'quiz'
     template_name = 'classroom/teachers/quiz_change_form.html'
 

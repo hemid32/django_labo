@@ -15,6 +15,7 @@
 
 
  {% if quiz.type_tp == 'RC' %}
+
     <div class = 'hemidi_centre' >
       <svg  id = 'svg_srcuit_rc' height="300" width="300">
                     <!-- resistance -->
@@ -199,10 +200,73 @@
 
     </div>
 {% endif %}
-  <p class="lead">{{ quiz.type_tp}}</p>
+  <p id="type_cr" class="lead">{{ quiz.type_tp}}</p>
+<!-- ta3i hada -->
+<input type="hidden" id="myVar" name="variable" value="100000">
+
+<button id = 'button_mesure' type="button" onclick="window.location" disabled ='true' >mesur</button>
+        <!------ difine type de circuite  ------->
+<script>
+    function pp(){
+    var tmp = he() ;
+
+    }
+</script>
+
+<button id = 'button_mesure2' type="button"  onclick="he()" >validation</button>
+        <!--- validation if treu active button else disabled -->
+     {% load static %}
+
+
+<script type="text/javascript" src="{% static 'js/pi_setting.js' %}"></script>
+
+
+
+
+<script>
+
+        // cett function call fonction setting et paseer argement
+            function he(){
+             var type_cr = document.getElementById("type_cr").textContent; // difine type circuite
+             if (type_cr === 'RC') {
+                var R = document.getElementById("resistance").textContent;
+                var C = document.getElementById("capa").textContent;
+
+                var r = confirm("confirm valeur :\n" + 'R =:' + R + '\nC =' + C);
+
+                if (r == true) {
+                   //RC_val(R,C)
+                   //h()
+
+
+
+
+                   document.getElementById("button_mesure").disabled = false;
+                   //window.location = "{% url 'students:get_vr' 12  1234 %}".replace(/1234/, R.toString());
+                   window.open(
+                      "{% url 'students:get_vr' 12  1234 %}".replace(/1234/, R.toString()),
+                      '_blank' // <- This is what makes it open in a new window.
+                    );
+                   return R
+                } else {
+                  return false;
+                }
+
+                //RC()
+             }
+            }
+
+</script>
+
+
+
+
+
   <form method="post" novalidate>
     {% csrf_token %}
     {{ form|crispy }}
     <button type="submit" class="btn btn-primary">Next →</button>
   </form>
 {% endblock %}
+
+

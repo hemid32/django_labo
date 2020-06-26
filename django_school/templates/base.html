@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/hemidi.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/fl.css' %}">
+
     {% if user.is_authenticated and user.is_teacher %}
       <link rel="stylesheet" type="text/css" href="{% static 'css/teachers.css' %}">
     {% else %}

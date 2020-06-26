@@ -35,6 +35,8 @@ class Quiz(models.Model):
     )
     type_tp = models.CharField(max_length=6 ,choices=type_tp_posible)
     description = models.TextField('description', max_length=500)
+    module = models.CharField(max_length=255, default='module')
+
 
 
 
