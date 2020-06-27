@@ -105,10 +105,11 @@ class StudentAnswer(models.Model):
 
 class correction_TP(models.Model) :
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    id_tp = models.IntegerField(default=100)
+    id_tp = models.IntegerField()
     nome_student = models.CharField(max_length=255, default='module')
     compte_rendu = models.FileField(upload_to='uploads_tp/')
     module = models.CharField(max_length=255, default='module')
     note = models.FloatField(default=0)
+    id_user = models.IntegerField()
 
 

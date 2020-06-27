@@ -31,7 +31,9 @@
           <tr>
             <td>{{ taken_quiz.student.user.username }}</td>
             <td>{{ taken_quiz.date|naturaltime }}</td>
-            <td>{{ taken_quiz.compte_rendu }}</td>
+           <td>  <a href="{%  url 'teachers:pdf_corect' %}?date={{ taken_quiz.compte_rendu }}" target="_blank"> compte rendu  </a>  </td>
+
+
           </tr>
         {% endfor %}
       </tbody>

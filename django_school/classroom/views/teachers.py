@@ -12,7 +12,9 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
-from ..models import Answer, Question, Quiz, User
+from ..models import Answer, Question, Quiz, User, TakenQuiz
+from django.conf import settings
+from django.http import HttpResponse, Http404, FileResponse
 
 
 class TeacherSignUpView(CreateView):
@@ -212,3 +214,23 @@ class QuestionDeleteView(DeleteView):
     def get_success_url(self):
         question = self.get_object()
         return reverse('teachers:quiz_change', kwargs={'pk': question.quiz_id})
+
+
+
+
+########### correction tp
+@login_required
+@teacher_required
+def pdf_corect(request):
+    #print(all_postes_.fiche_tp)
+    p = request.GET.get('date')
+    #file_path = os.path.join(settings.MEDIA_ROOT, all_postes_.fiche_tp)
+    your_media_root = settings.MEDIA_ROOT #/root/Desktop/testdjangoschool/src/django_school/media
+
+    path_pdf =  your_media_root  + '/' + str(p)
+
+    #print(your_media_root)
+    try:
+        return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
+    except FileNotFoundError:
+        raise Http404('not found')
