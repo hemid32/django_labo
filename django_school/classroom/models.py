@@ -86,7 +86,7 @@ class Student(models.Model):
 
 
 class TakenQuiz(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='taken_quizzes')
+    student = models.ForeignKey(Student,on_delete=models.CASCADE, related_name='taken_quizzes')
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='taken_quizzes')
     score = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
@@ -104,12 +104,13 @@ class StudentAnswer(models.Model):
 
 
 class correction_TP(models.Model) :
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE , null=True, blank=True, related_name='taken_quizzes')
     id_tp = models.IntegerField()
     nome_student = models.CharField(max_length=255, default='module')
     compte_rendu = models.FileField(upload_to='uploads_tp/')
     module = models.CharField(max_length=255, default='module')
     note = models.FloatField(default=0)
     id_user = models.IntegerField()
+
 
 

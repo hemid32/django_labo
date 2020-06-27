@@ -84,7 +84,7 @@ class TakenQuizListView(ListView):
 @login_required
 @student_required
 def take_quiz(request, pk):
-    print(correction_TP.objects.all())
+    #print(correction_TP.objects.all())
     quiz = get_object_or_404(Quiz, pk=pk)
     student = request.user.student
 
@@ -118,23 +118,25 @@ def take_quiz(request, pk):
                 student_answer = form.save(commit=False)
                 #f = correction_TP.objects.get(user = request.user)
                 #f = 'hemidi benameur'
-                print('fffff=', 'hemidi/ol')
+                #print('fffff=', 'hemidi/ol')
                 #student_answer.student = student
-                print('student.pk ====' ,student.pk )
+                #print('student.pk ====' ,student.pk )
                 student_answer.id_tp =  question.pk
                 student_answer.id_user =  student.pk
+
                 student_answer.save()
                 if student.get_unanswered_questions(quiz).exists() and False:
                     return redirect('students:take_quiz', pk)
                 else:
                     #correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
 
-                    h = correction_TP.objects.get(id_tp = question.pk , id_user = student.pk)
-                    #print('correction_TP.objects.get() ==== ',h.compte_rendu)
+                    h = correction_TP.objects.get(id_tp = question.pk , id_user = student.pk )
+                    print('correction_TP.objects.get() ==== ',h.compte_rendu)
                     #f = correction_TP.objects.get(user=student.user)
 
                     score = 100
                     TakenQuiz.objects.create(student=student, quiz=quiz, score=score ,compte_rendu = h.compte_rendu  )
+
 
                     if score < 50.0:
                         messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
