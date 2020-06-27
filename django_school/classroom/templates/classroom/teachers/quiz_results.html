@@ -23,6 +23,7 @@
           <th>Student</th>
           <th>Date</th>
           <th>Score</th>
+          <th>pdf</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +31,7 @@
           <tr>
             <td>{{ taken_quiz.student.user.username }}</td>
             <td>{{ taken_quiz.date|naturaltime }}</td>
-            <td>{{ taken_quiz.score }}</td>
+            <td>{{ taken_quiz.compte_rendu }}</td>
           </tr>
         {% endfor %}
       </tbody>

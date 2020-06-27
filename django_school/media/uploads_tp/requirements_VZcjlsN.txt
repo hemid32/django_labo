@@ -1,0 +1,13 @@
+sudo update-alternatives --config python
+sudo service bluetooth start
+
+export P4A_RELEASE_KEYSTORE=~/keystores/benameur.keystore
+export P4A_RELEASE_KEYSTORE_PASSWD=benameur
+export P4A_RELEASE_KEYALIAS_PASSWD=benameur
+export P4A_RELEASE_KEYALIAS=benameur
+
+adb install myapp-0.1-arm64-v8a-release.apk
+
+
+buildozer -v android release
+

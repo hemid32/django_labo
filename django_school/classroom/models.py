@@ -77,7 +77,9 @@ class Student(models.Model):
             .filter(answer__question__quiz=quiz) \
             .values_list('answer__question__pk', flat=True)
         questions = quiz.questions.exclude(pk__in=answered_questions).order_by('text')
+        note = 10
         return questions
+
 
     def __str__(self):
         return self.user.username
@@ -88,8 +90,25 @@ class TakenQuiz(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='taken_quizzes')
     score = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
+    compte_rendu = models.FileField(upload_to='uploads_tp/')
+
+
+
+
 
 
 class StudentAnswer(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='quiz_answers')
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='+')
+    compte_rendu = models.FileField(upload_to='uploads_tp/')
+
+
+class correction_TP(models.Model) :
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    id_tp = models.IntegerField(default=100)
+    nome_student = models.CharField(max_length=255, default='module')
+    compte_rendu = models.FileField(upload_to='uploads_tp/')
+    module = models.CharField(max_length=255, default='module')
+    note = models.FloatField(default=0)
+
+

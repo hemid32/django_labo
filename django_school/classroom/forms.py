@@ -5,7 +5,8 @@ from django.forms import DateInput
 from django.forms.utils import ValidationError
 
 from classroom.models import (Answer, Question, Student, StudentAnswer,
-                              Subject, User)
+                              Subject, User , correction_TP)
+
 
 
 class TeacherSignUpForm(UserCreationForm):
@@ -83,17 +84,32 @@ class BaseAnswerInlineFormSet(forms.BaseInlineFormSet):
 
 
 class TakeQuizForm(forms.ModelForm):
+
     answer = forms.ModelChoiceField(
         queryset=Answer.objects.none(),
         widget=forms.RadioSelect(),
         required=True,
         empty_label=None)
 
+
+
     class Meta:
         model = StudentAnswer
-        fields = ('answer', )
+        fields = ('answer',)
+        #fields = ('answer')
+
+
+
 
     def __init__(self, *args, **kwargs):
         question = kwargs.pop('question')
+
         super().__init__(*args, **kwargs)
         self.fields['answer'].queryset = question.answers.order_by('text')
+
+
+class  correction_TP_Form(forms.ModelForm):
+
+    class Meta :
+        model = correction_TP
+        fields = ( 'compte_rendu', )

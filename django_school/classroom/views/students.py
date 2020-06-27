@@ -11,8 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from ..decorators import student_required
-from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
-from ..models import Quiz, Student, TakenQuiz, User, Question
+from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm, correction_TP_Form
+from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP
 import os
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse
@@ -84,39 +84,62 @@ class TakenQuizListView(ListView):
 @login_required
 @student_required
 def take_quiz(request, pk):
+    print(correction_TP.objects.all())
     quiz = get_object_or_404(Quiz, pk=pk)
     student = request.user.student
+
 
     if student.quizzes.filter(pk=pk).exists():
         return render(request, 'students/taken_quiz.html')
 
     total_questions = quiz.questions.count()
+    # quiz == nome TP
+    #print('fffffffff', quiz)
+
     unanswered_questions = student.get_unanswered_questions(quiz)
     total_unanswered_questions = unanswered_questions.count()
     progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = unanswered_questions.first()
+    print(request.user.pk)
+    print('student.pk ====', student.pk)
 
     if request.method == 'POST':
-        form = TakeQuizForm(question=question, data=request.POST)
+        #form = TakeQuizForm(question=question, data=request.POST)
+        form = correction_TP_Form(request.POST , request.FILES)
 
-        if form.is_valid() or True:
+
+
+
+        if form.is_valid() :
+
+
+
             with transaction.atomic():
                 student_answer = form.save(commit=False)
-                student_answer.student = student
+                #f = correction_TP.objects.get(user = request.user)
+                #f = 'hemidi benameur'
+                print('fffff=', 'hemidi/ol')
+                #student_answer.student = student
+                print('student.pk ====' ,student.pk )
+                student_answer.id_tp =  student.pk
                 student_answer.save()
-                if student.get_unanswered_questions(quiz).exists():
+                if student.get_unanswered_questions(quiz).exists() and False:
                     return redirect('students:take_quiz', pk)
                 else:
-                    correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
-                    score = round((correct_answers / total_questions) * 100.0, 2)
-                    TakenQuiz.objects.create(student=student, quiz=quiz, score=score)
+                    #correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
+                    h = correction_TP.objects.get(id_tp = student.pk)
+                    print('correction_TP.objects.get() ==== ',h.compte_rendu)
+                    #f = correction_TP.objects.get(user=student.user)
+
+                    score = 100
+                    TakenQuiz.objects.create(student=student, quiz=quiz, score=score ,compte_rendu = h.compte_rendu )
                     if score < 50.0:
                         messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
                     else:
                         messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
                     return redirect('students:quiz_list')
     else:
-        form = TakeQuizForm(question=question)
+        form = correction_TP_Form()
 
     return render(request, 'classroom/students/take_quiz_form.html', {
         'quiz': quiz,
