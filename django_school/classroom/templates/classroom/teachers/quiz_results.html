@@ -20,11 +20,11 @@
     <table class="table mb-0">
       <thead>
         <tr>
-          <th>Student</th>
+          <th>L'étudiant</th>
           <th>Date</th>
-          <th>Score</th>
-          <th>pdf</th>
-          <th>note</th>
+          <th>compte-rendu</th>
+          <th>la note</th>
+          <th>Évaluation</th>
         </tr>
       </thead>
       <tbody>
@@ -33,8 +33,13 @@
             <td>{{ taken_quiz.student.user.first_name }}  {{ taken_quiz.student.user.last_name }}</td>
             <td>{{ taken_quiz.date|naturaltime }}</td>
            <td>  <a href="{%  url 'teachers:pdf_corect' %}?date={{ taken_quiz.compte_rendu }}" target="_blank"> compte rendu  </a>  </td>
+             {% if  taken_quiz.score == 100.0 %}
+              <td> en attente  </td>
+              {% else %}
+              <td> {{ taken_quiz.score }}  </td>
+              {% endif %}
            <td> <a onclick='PopUp({{ taken_quiz.student.user.pk }} , {{ taken_quiz.pk }})' class="btn btn-primary">note</a></td>
-            <td>  {{ taken_quiz.score }}   </td>
+
 
 
 

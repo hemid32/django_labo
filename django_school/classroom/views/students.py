@@ -134,7 +134,7 @@ def take_quiz(request, pk):
                     print('correction_TP.objects.get() ==== ',h.compte_rendu)
                     #f = correction_TP.objects.get(user=student.user)
 
-                    score = 100
+                    score = 100.0
                     TakenQuiz.objects.create(student=student, quiz=quiz, score=score ,compte_rendu = h.compte_rendu  )
 
 

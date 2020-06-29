@@ -6,17 +6,27 @@
     <table class="table mb-0">
       <thead>
         <tr>
-          <th>Quiz</th>
-          <th>Subject</th>
-          <th>Score</th>
+          <th>nome TP</th>
+          <th>module</th>
+          <th>date</th>
+          <th>note</th>
         </tr>
       </thead>
       <tbody>
         {% for taken_quiz in taken_quizzes %}
           <tr>
             <td>{{ taken_quiz.quiz.name }}</td>
-            <td>{{ taken_quiz.quiz.subject.get_html_badge }}</td>
+            <td>{{ taken_quiz.quiz.module }}</td>
+            <td>{{ taken_quiz.date}}</td>
+            {% if taken_quiz.score == 100.0  %}
+            <td> en cours...</td>
+
+            {% endif  %}
+            {% if taken_quiz.score != 100.0  %}
+
             <td>{{ taken_quiz.score }}</td>
+            {% endif  %}
+
           </tr>
         {% empty %}
           <tr>
