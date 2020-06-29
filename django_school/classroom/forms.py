@@ -5,7 +5,7 @@ from django.forms import DateInput
 from django.forms.utils import ValidationError
 
 from classroom.models import (Answer, Question, Student, StudentAnswer,
-                              Subject, User , correction_TP)
+                              Subject, User , correction_TP,evaluation_module)
 
 
 
@@ -113,3 +113,10 @@ class  correction_TP_Form(forms.ModelForm):
     class Meta :
         model = correction_TP
         fields = ( 'compte_rendu', )
+
+
+class evaluation_form(forms.ModelForm):
+    class Meta:
+        model = evaluation_module
+        fields = ('note',)
+

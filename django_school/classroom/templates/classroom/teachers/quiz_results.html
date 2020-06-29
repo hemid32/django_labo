@@ -24,6 +24,7 @@
           <th>Date</th>
           <th>Score</th>
           <th>pdf</th>
+          <th>note</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +33,9 @@
             <td>{{ taken_quiz.student.user.first_name }}  {{ taken_quiz.student.user.last_name }}</td>
             <td>{{ taken_quiz.date|naturaltime }}</td>
            <td>  <a href="{%  url 'teachers:pdf_corect' %}?date={{ taken_quiz.compte_rendu }}" target="_blank"> compte rendu  </a>  </td>
+           <td> <a onclick='PopUp()' class="btn btn-primary">note</a></td>
+            <td>  {{ taken_quiz.score }}   </td>
+
 
 
           </tr>
@@ -42,4 +46,24 @@
       Total respondents: <strong>{{ total_taken_quizzes }}</strong>
     </div>
   </div>
+<!-- ana ajotithem  -->
+<dialog id="addForm" style="visibility: hidden;">
+    <form action="{% url 'teachers:quiz_results' quiz.pk %}" method="post" >
+    {% csrf_token %}
+    {{ form }}
+
+    <input id="task_submit"  type="submit" value="Submit"/>
+    </form>
+</dialog>
+
+
+<script>
+
+function PopUp() {
+	el = document.getElementById("addForm");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+}
+
+</script>
+
 {% endblock %}

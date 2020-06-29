@@ -8,13 +8,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+                                  UpdateView, TemplateView)
 
 from ..decorators import teacher_required
-from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
+from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm, evaluation_form
 from ..models import Answer, Question, Quiz, User, TakenQuiz
 from django.conf import settings
-from django.http import HttpResponse, Http404, FileResponse
+from django.http import HttpResponse, Http404, FileResponse, HttpResponseForbidden
+from django.views.generic.edit import FormMixin
 
 
 class TeacherSignUpView(CreateView):
@@ -101,13 +102,21 @@ class QuizDeleteView(DeleteView):
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
-class QuizResultsView(DetailView):
+class QuizResultsView(FormMixin,DetailView):
+
     model = Quiz
     context_object_name = 'quiz'
     template_name = 'classroom/teachers/quiz_results.html'
+    form_class = evaluation_form
+
+    def get_success_url(self):
+        return reverse('teachers:quiz_results', kwargs={'pk': Quiz.pk})
+
+    #return reverse('author-detail', kwargs={'pk': self.object.pk})
 
     def get_context_data(self, **kwargs):
         quiz = self.get_object()
+
 
         taken_quizzes = quiz.taken_quizzes.select_related('student__user').order_by('-date')
         total_taken_quizzes = taken_quizzes.count()
@@ -115,13 +124,50 @@ class QuizResultsView(DetailView):
         extra_context = {
             'taken_quizzes': taken_quizzes,
             'total_taken_quizzes': total_taken_quizzes,
-            'quiz_score': quiz_score
+            'quiz_score': quiz_score,
+            'form': evaluation_form(initial={'post': self.object})
         }
+
         kwargs.update(extra_context)
         return super().get_context_data(**kwargs)
 
+
+
     def get_queryset(self):
         return self.request.user.quizzes.all()
+
+
+    def post(self, request, *args, **kwargs):
+        print('POOOOOOOOOOOOOOOOOOOOOST')
+
+        self.object = self.get_object()
+        form = self.get_form()
+        note = request.POST['note']
+        print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note)
+        if form.is_valid():
+            #return self.form_valid(form)
+
+            #note =  request.POST['note']
+            #print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx')
+
+            #return reverse('teachers:quiz_results', Quiz.pk)
+            messages.success(self.request, 'Le note a été modifié.')
+            quiz = self.get_object()
+            #t = TakenQuiz.objects.get(quiz = quiz , student = )
+            #t.value = 999  # change field
+            #t.save()  # this will update only
+
+            return redirect('teachers:quiz_results' ,quiz.pk)
+
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        return super(QuizResultsView, self).form_valid(form)
+
+
+
 
 
 @login_required
@@ -234,3 +280,4 @@ def pdf_corect(request):
         return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
     except FileNotFoundError:
         raise Http404('not found')
+

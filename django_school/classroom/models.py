@@ -112,5 +112,14 @@ class correction_TP(models.Model) :
     note = models.FloatField(default=0)
     id_user = models.IntegerField()
 
+class evaluation_module(models.Model):
+    id_user = models.IntegerField(default=0)
+    note = models.FloatField(default=0)
+    id_tp = models.IntegerField(default=0)
+
+
+
+
+
 
 
