@@ -138,12 +138,14 @@ class QuizResultsView(FormMixin,DetailView):
 
 
     def post(self, request, *args, **kwargs):
-        print('POOOOOOOOOOOOOOOOOOOOOST')
+        #print('POOOOOOOOOOOOOOOOOOOOOST')
 
         self.object = self.get_object()
         form = self.get_form()
         note = request.POST['note']
-        print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note)
+        ID_std = request.POST['std_user_Id']
+        ID_TP = request.POST['TP_Id']
+        print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note ,ID_std  , ID_TP)
         if form.is_valid():
             #return self.form_valid(form)
 
@@ -153,9 +155,12 @@ class QuizResultsView(FormMixin,DetailView):
             #return reverse('teachers:quiz_results', Quiz.pk)
             messages.success(self.request, 'Le note a été modifié.')
             quiz = self.get_object()
-            #t = TakenQuiz.objects.get(quiz = quiz , student = )
-            #t.value = 999  # change field
-            #t.save()  # this will update only
+
+            print()
+            t = TakenQuiz.objects.get(pk = ID_TP , student = ID_std )
+            print('student ============ ', t.score)
+            t.score = note  # change field
+            t.save()  # this will update only
 
             return redirect('teachers:quiz_results' ,quiz.pk)
 

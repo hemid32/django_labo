@@ -33,7 +33,7 @@
             <td>{{ taken_quiz.student.user.first_name }}  {{ taken_quiz.student.user.last_name }}</td>
             <td>{{ taken_quiz.date|naturaltime }}</td>
            <td>  <a href="{%  url 'teachers:pdf_corect' %}?date={{ taken_quiz.compte_rendu }}" target="_blank"> compte rendu  </a>  </td>
-           <td> <a onclick='PopUp()' class="btn btn-primary">note</a></td>
+           <td> <a onclick='PopUp({{ taken_quiz.student.user.pk }} , {{ taken_quiz.pk }})' class="btn btn-primary">note</a></td>
             <td>  {{ taken_quiz.score }}   </td>
 
 
@@ -49,6 +49,10 @@
 <!-- ana ajotithem  -->
 <dialog id="addForm" style="visibility: hidden;">
     <form action="{% url 'teachers:quiz_results' quiz.pk %}" method="post" >
+       <input id="addFormid2" type="hidden" id="custId" name="std_user_Id" value="0">
+       <input id="addFormid3" type="hidden" id="cust" name="TP_Id" value="0">
+
+
     {% csrf_token %}
     {{ form }}
 
@@ -59,8 +63,10 @@
 
 <script>
 
-function PopUp() {
+function PopUp(h , n) {
 	el = document.getElementById("addForm");
+	document.getElementById("addFormid2").value = h ;
+	document.getElementById("addFormid3").value = n ;
 	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 }
 
