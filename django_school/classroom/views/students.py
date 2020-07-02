@@ -203,13 +203,18 @@ def get_vr(request, id , r):
 
     session_key = request.session.session_key
     # date 2 heur
-    request.session.set_expiry(2*60*60)
-    #print(' blocer after ==== ' ,     Session.objects.all()[0] )
+    request.session.clear_expired()
+
+    #print(' blocer after ==== ' ,     Session.objects.all().count() )
+    #Session.objects.all().delete()
 
     #print('session_key ========' , session_key)
     #print('yes' , r)
-    if Session.objects.all().count() >  1 :
+    if Session.objects.all().count() !=  1 :
         if str(session_key) == str(Session.objects.all()[0]) :
+            request.session.set_expiry(60*10)
+            print(' blocer after ==== ', Session.objects.all().count())
+
             cartTP('000000') # initialisation
             cartTP(r)
             return render(request, 'classroom/students/loadig.html')
