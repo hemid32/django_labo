@@ -221,6 +221,7 @@ def get_vr(request, id , r):
         else :
             return render(request, '500.html')
     else :
+        cartTP(r)
         return render(request, 'classroom/students/loadig.html')
 
 
@@ -238,7 +239,7 @@ def cartTP(statuspin) :
         #subprocess.call(['gpio' , '-g' , 'mode' , switch[1] , 'out'])
         print(['gpio' , '-g' , 'mode' , switch[1] , 'out'])
         #subprocess.call(['gpio' , '-g' , 'wirite' , switch[1] , switch[0]])
-        print(['gpio' , '-g' , 'wirite' , switch[1] , switch[0]])
+        print(['gpio' , '-g' , 'write' , switch[1] , switch[0]])
 
 
 
