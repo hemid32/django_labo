@@ -17,7 +17,8 @@ import os
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse
 import requests as RG
-
+from django.contrib.sessions.models import Session
+import subprocess
 
 
 class StudentSignUpView(CreateView):
@@ -200,9 +201,41 @@ def pdf_view(request, id):
 @student_required
 def get_vr(request, id , r):
 
-    print('yes' , r)
+    session_key = request.session.session_key
+    # date 2 heur
+    request.session.set_expiry(2*60*60)
+    #print(' blocer after ==== ' ,     Session.objects.all()[0] )
 
-    return render(request, 'classroom/students/loadig.html')
+    #print('session_key ========' , session_key)
+    #print('yes' , r)
+    if Session.objects.all().count() >  1 :
+        if str(session_key) == str(Session.objects.all()[0]) :
+            cartTP('000000') # initialisation
+            cartTP(r)
+            return render(request, 'classroom/students/loadig.html')
+        else :
+            return render(request, '500.html')
+    else :
+        return render(request, 'classroom/students/loadig.html')
+
+
+def cartTP(statuspin) :
+    #print('statuspin  ===== ', statuspin)
+    switch1 = [statuspin[0] , '17' ]
+    switch2 = [statuspin[1] , '27' ]
+    switch3 = [statuspin[1] , '22' ]
+    switch4 = [statuspin[1] , '10' ]
+    switch5 = [statuspin[1] , '09' ]
+    switch6 = [statuspin[1] , '11' ]
+    switchall = [switch1 , switch2, switch3 , switch4 , switch5 , switch6]
+    #switch7 = statuspin[6]
+    for  switch in switchall :
+        #subprocess.call(['gpio' , '-g' , 'mode' , switch[1] , 'out'])
+        print(['gpio' , '-g' , 'mode' , switch[1] , 'out'])
+        #subprocess.call(['gpio' , '-g' , 'wirite' , switch[1] , switch[0]])
+        print(['gpio' , '-g' , 'wirite' , switch[1] , switch[0]])
+
+
 
 
 
