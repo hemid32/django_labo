@@ -92,3 +92,10 @@ chmod g+w /root/Desktop/testdjangoschool/src/django_school/db.sqlite3
 chmod g+w /root/Desktop/testdjangoschool/src/django_school
 sudo chown :www-data /root/Desktop/testdjangoschool/src/django_school/db.sqlite3
 sudo chown :www-data /root/Desktop/testdjangoschool/src/django_school
+
+erurr file  
+sudo chmod -R 777 /var/www/
+
+
+get ip address
+dig +short myip.opendns.com @resolver1.opendns.com
