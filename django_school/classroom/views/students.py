@@ -200,22 +200,25 @@ def pdf_view(request, id):
 @login_required
 @student_required
 def get_vr(request, id , r):
-
+    print(request.session.keys())
     session_key = request.session.session_key
     # date 2 heur
-    request.session.clear_expired()
-
-    #print(' blocer after ==== ' ,     Session.objects.all().count() )
+    #request.session.clear_expired()
+    #request.session.clearsessions()
+    print('jjjjjjj =========' ,  session_key.startswith("_"))
+  
+    print(' blocer after ==== ' ,     Session.objects.all() )
+    print(' llllllll ==== ' ,     request.session.exists(Session.objects.all()[0]) )
     #Session.objects.all().delete()
-
     #print('session_key ========' , session_key)
     #print('yes' , r)
-    if Session.objects.all().count() !=  1 :
+    if Session.objects.all().count() >  1 :
         if str(session_key) == str(Session.objects.all()[0]) :
-            request.session.set_expiry(60*10)
-            print(' blocer after ==== ', Session.objects.all().count())
 
-            cartTP('000000') # initialisation
+            print(' blocer after ==== ', Session.objects.all().count())
+            #cartTP('000000') # initialisation
+            request.session.set_expiry(50)
+
             cartTP(r)
             return render(request, 'classroom/students/loadig.html')
         else :
