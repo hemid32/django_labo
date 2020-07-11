@@ -36,8 +36,11 @@ class StudentSignUpForm(UserCreationForm):
         model = User
         fields = ('first_name' ,'last_name' ,'date_of_birth' ,'username', 'password1', 'password2')
 
-        
 
+
+    def __init__(self, *args, **kwargs):
+        super(StudentSignUpForm, self).__init__(*args, **kwargs)
+        self.fields['interests'].label  = 'classe'
 
 
 

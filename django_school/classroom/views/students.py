@@ -15,10 +15,11 @@ from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm, corre
 from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP
 import os
 from django.conf import settings
-from django.http import HttpResponse, Http404, FileResponse
+from django.http import HttpResponse, Http404, FileResponse, JsonResponse
 import requests as RG
 from django.contrib.sessions.models import Session
 import subprocess
+import json
 
 
 class StudentSignUpView(CreateView):
@@ -207,7 +208,7 @@ def get_vr(request, id , r):
     #request.session.clearsessions()
     print('jjjjjjj =========' ,  session_key.startswith("_"))
   
-    print(' blocer after ==== ' ,     Session.objects.all() )
+    print(' blocer after ==== ' ,     Session.objects.all().count())
     print(' llllllll ==== ' ,     request.session.exists(Session.objects.all()[0]) )
     #Session.objects.all().delete()
     #print('session_key ========' , session_key)

@@ -1,18 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Welcome to the ghiet <span class="icon-emo-happy"></span></h2>
+  <h2>Bienvenue<span class="icon-emo-happy"></span></h2>
   <p class="lead">
-    If you already have an account, go ahead and <a href="{% url 'login' %}">log in</a>. If you are new to Django Schools, get started
-    by creating a <a href="{% url 'student_signup' %}">student account</a> or a <a href="{% url 'teacher_signup' %}">teacher account</a>.
+    Ce site est un projet de fin d'études Intitulé : <span style="font-weight:900"> Pilotage à distance d’un système de contrôle pour un
+laboratoire distant  </span>Connectez-vous <a href="{% url 'login' %}">ici</a>. Si vous êtes nouveau sur Labo elbayadh créez un  <a href="{% url 'student_signup' %}">Compte étudiant</a> ou <a href="{% url 'teacher_signup' %}">Compte enseignant</a>.
   </p>
   <hr>
-  <h3>What's this about?</h3>
+  <h3>Comment ça marche ?</h3>
   <p>
-    This Django application is an example I created to illustrate a <a href="https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html">blog post about how to implement multiple user types</a>.
-    In this application, users can sign up as a student or a teacher. Teachers can create quizzes and students can answer quizzes
-    based on their interests.
+    Le but de ce site est de réaliser un travail pratique à distance. Cela contrôle les outils de laboratoire. Dans notre projet, Choisi de travail pratique sur un circuit électrique. <br>
+L'étudiant peut se connecter à l'interface, créer un nouveau compte et se connecter après cela.Sur la page d'accueil. Il peut voir toutes les TP en attente de travail (aussi le travail qui a été achevé et attend l'évaluation de l'enseignant). Il peut choisir une TP et commencer à interagir à distance avec des appareils électroniques en laboratoire.Après avoir terminé le travail, l'étudiant déposé  le rapport de travail pour évaluation  par l'enseignant, <br>
+L'enseignant peut ajouter de nouveaux travaux de laboratoire. Il peut également modifier et supprimer. Après avoir ajouté le travail, il devient possible de voir le nombre d'élèves qui ont terminé le travail. Et consultez le rapport de chaque élève. Il peut évaluer chaque élève.
   </p>
-  <p>Want to run this code locally? <a href="https://github.com/sibtc/django-multiple-user-types-example/blob/master/README.md">Read detailed instructions on how to run this project</a>.</p>
-  <p class="mb-0">Vitor Freitas<br><a href="https://twitter.com/vitorfs/">@vitorfs</a></p>
 {% endblock %}

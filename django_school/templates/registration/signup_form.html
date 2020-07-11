@@ -4,8 +4,13 @@
 
 {% block content %}
   <div class="row">
-    <div class="col-md-8 col-sm-10 col-12">
-      <h2>Sign up as a {{ user_type }}</h2>
+    <div class="col-md-8 col-sm-10 col-12">h
+      {% if user_type  == 'student' %}
+      <!-- <h2>Sign up as a {{ user_type }}</h2> -->
+      <h2>S'inscrire en tant qu'étudiant </h2>
+      {% else %}
+      <h2>Inscrivez-vous en tant enseignante</h2>
+      {% endif %}
       <form method="post" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">

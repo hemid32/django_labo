@@ -3,20 +3,18 @@
 {% block content %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item active" aria-current="page">My Quizzes</li>
+      <li class="breadcrumb-item active" aria-current="page">Bienvenue, monsieur <strong> {{user.first_name  }} {{user.last_name}} </strong> Voici une liste de toutes les TP que vous avez ajoutées. Pour modifier ou supprimer cliquez sur le titre de TP. Pour ajouter un nouveau TP, cliquez sur Ajouter un TP.
+ Pour voir les résultats et les rapports des étudiants, cliquez sur Afficher les résultats à côté de chaque TP</li>
     </ol>
   </nav>
-  <h2 class="mb-3">My Quizzes</h2>
-  <a href="{% url 'teachers:quiz_add' %}" class="btn btn-primary mb-3" role="button">Add TP</a>
+  <a href="{% url 'teachers:quiz_add' %}" class="btn btn-primary mb-3" role="button">Ajouter un TP</a>
   <div class="card">
     <table class="table mb-0">
       <thead>
         <tr>
-          <th>Quiz</th>
-          <th>Subject</th>
-          <th>Questions</th>
-          <th>Taken</th>
-          <th></th>
+          <th>Title TP</th>
+          <th>Classe</th>
+          <th>N qui a terminé </th>
         </tr>
       </thead>
       <tbody>
@@ -24,10 +22,9 @@
           <tr>
             <td class="align-middle"><a href="{% url 'teachers:quiz_change' quiz.pk %}">{{ quiz.name }}</a></td>
             <td class="align-middle">{{ quiz.subject.get_html_badge }}</td>
-            <td class="align-middle">{{ quiz.questions_count }}</td>
             <td class="align-middle">{{ quiz.taken_count }}</td>
             <td class="text-right">
-              <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>
+              <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">Résultats</a>
             </td>
           </tr>
         {% empty %}

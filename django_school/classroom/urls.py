@@ -14,8 +14,7 @@ urlpatterns = [
         path('quiz/Compt_rendu/<int:id>', students.pdf_view, name='pdf_view'),
         path('quiz/Compt_rendu/<int:id>/data=<str:r>', students.get_vr, name='get_vr'),
 
-
-        ], 'classroom'), namespace='students')),
+                               ], 'classroom'), namespace='students')),
 
     path('teachers/', include(([
         path('', teachers.QuizListView.as_view(), name='quiz_change_list'),
