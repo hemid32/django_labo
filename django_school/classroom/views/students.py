@@ -15,11 +15,14 @@ from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm, corre
 from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP
 import os
 from django.conf import settings
-from django.http import HttpResponse, Http404, FileResponse, JsonResponse
+from django.http import HttpResponse, Http404, FileResponse, JsonResponse, HttpResponseRedirect
 import requests as RG
 from django.contrib.sessions.models import Session
 import subprocess
 import json
+#
+from requests import get
+
 
 
 class StudentSignUpView(CreateView):
@@ -104,6 +107,7 @@ def take_quiz(request, pk):
     question = unanswered_questions.first()
     print(request.user.pk)
     print('student.pk ====', student.pk)
+
 
     if request.method == 'POST':
         #form = TakeQuizForm(question=question, data=request.POST)
@@ -213,6 +217,11 @@ def get_vr(request, id , r):
     #Session.objects.all().delete()
     #print('session_key ========' , session_key)
     #print('yes' , r)
+    ip = get('https://api.ipify.org').text
+    contax = {
+        'urle': 'http://'+ip + ':5000/' ,
+
+    }
     if Session.objects.all().count() >  1 :
         if str(session_key) == str(Session.objects.all()[0]) :
 
@@ -221,16 +230,16 @@ def get_vr(request, id , r):
             request.session.set_expiry(50)
 
             cartTP(r)
-            return render(request, 'classroom/students/loadig.html')
+            return render(request, 'classroom/students/osilo.html' , contax)
         else :
             return render(request, '500.html')
     else :
         cartTP(r)
-        return render(request, 'classroom/students/loadig.html')
+        return render(request, 'classroom/students/osilo.html',contax)
 
 
 def cartTP(statuspin) :
-    #print('statuspin  ===== ', statuspin)
+    #print('statuspin  ===== ', STATUSPIN)
     switch1 = [statuspin[0] , '17' ]
     switch2 = [statuspin[1] , '27' ]
     switch3 = [statuspin[1] , '22' ]
@@ -247,8 +256,10 @@ def cartTP(statuspin) :
 
 
 
-
-
+def test_redirect(request):
+    url = request.get_full_path()
+    #return HttpResponseRedirect("wwww.192.168.1.20.com")
+    return  redirect('/')
 
 ############## coper
 """
