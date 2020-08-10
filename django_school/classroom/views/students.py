@@ -220,6 +220,11 @@ def get_vr(request, id , r):
     #print('session_key ========' , session_key)
     #print('yes' , r)
     ip = get('https://api.ipify.org').text
+
+    # if  switch 1 deux position utilise GPIO 5  place 29
+    subprocess.call(['gpio', '-g', 'mode', '5', 'out'])
+    subprocess.call(['gpio', '-g', 'write', '5', '1'])
+
     contax = {
         'urle': 'http://'+ip + ':5000/' ,
 
@@ -230,16 +235,14 @@ def get_vr(request, id , r):
             print(' blocer after ==== ', Session.objects.all().count())
             #cartTP('000000') # initialisation
             request.session.set_expiry(50)
-
-            cartTP(r)
             return render(request, 'classroom/students/osilo.html' , contax)
         else :
             return render(request, '500.html')
     else :
-        cartTP(r)
+
         return render(request, 'classroom/students/osilo.html',contax)
 
-
+'''
 def cartTP(statuspin) :
     #print('statuspin  ===== ', STATUSPIN)
     switch1 = [statuspin[0] , '17' ]
@@ -255,7 +258,7 @@ def cartTP(statuspin) :
         print(['gpio' , '-g' , 'mode' , switch[1] , 'out'])
         #subprocess.call(['gpio' , '-g' , 'wirite' , switch[1] , switch[0]])
         print(['gpio' , '-g' , 'write' , switch[1] , switch[0]])
-
+'''
 
 
 def test_redirect(request):
@@ -317,10 +320,23 @@ def take_quiz(request, pk):
 @csrf_exempt
 def like(request):
     if request.method == 'POST':
-        print('444444444444444444')
-
+        switchs = {'switch_1' : '17' , 'switch_2' : '27','switch_3' : '22',
+                   'switch_4' : '10' , 'switch_5' : '09' , 'switch_6' : '11' ,
+                   'switch_7' : '0000' }
         data = request.body
-        print(data)
+        switch = str(data).split('&')[0].split('=')[1]
+        status = str(data).split('&')[1].split('=')[1][:-1]
+        if switch == 'switch_1' and status == 1 :
+            subprocess.call(['gpio', '-g', 'mode', '5', 'out'])
+            subprocess.call(['gpio', '-g', 'write', '5', '0'])
+        if switch == 'switch_1' and status == 0:
+            subprocess.call(['gpio', '-g', 'mode', '5', 'out'])
+            subprocess.call(['gpio', '-g', 'write', '5', '1'])
+
+        subprocess.call(['gpio' , '-g' , 'mode' , switchs[switch] , 'out'])
+        #print(['gpio', '-g', 'mode', switchs[switch], 'out'])
+        subprocess.call(['gpio' , '-g' , 'wirite' , switchs[switch] , status])
+        #print(['gpio', '-g', 'write', switchs[switch] , status])
 
 
     ctx = {'likes_count': 'rt', 'message':'ffffff'}
