@@ -14,6 +14,7 @@ urlpatterns = [
         path('quiz/Compt_rendu/<int:id>', students.pdf_view, name='pdf_view'),
         path('test', students.test_redirect, name='test_view'),
         path('quiz/Compt_rendu/<int:id>/data=<str:r>', students.get_vr, name='get_vr'),
+        path('like', students.like,  name='like_h' ),
 
                                ], 'classroom'), namespace='students')),
 

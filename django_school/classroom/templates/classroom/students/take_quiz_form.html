@@ -250,10 +250,12 @@
             var switch_status = document.getElementById(switch_id).getAttribute("y2");
             if ( switch_status == 100){
                 document.getElementById("switch_1").setAttribute("y2", "80");
+                myfnc(switch_id ,'1');
 
 
             }else{
                  document.getElementById("switch_1").setAttribute("y2", "100");
+                  myfnc(switch_id ,'0');
 
                 }
          }
@@ -263,10 +265,12 @@
             if ( switch_status == 400){
                 document.getElementById("switch_2").setAttribute("y2", "375");
                 document.getElementById("switch_2_p").setAttribute("cy", "373");
+                myfnc(switch_id ,'0');
 
             }else{
                  document.getElementById("switch_2").setAttribute("y2", "400");
                  document.getElementById("switch_2_p").setAttribute("cy", "400");
+                 myfnc(switch_id ,'1');
                 }
          }
 
@@ -276,10 +280,12 @@
             if ( switch_status == 520){
                 document.getElementById("switch_3").setAttribute("y2", "495");
                 document.getElementById("switch_3_p").setAttribute("cy", "493");
+                myfnc(switch_id ,'0');
 
             }else{
                  document.getElementById("switch_3").setAttribute("y2", "520");
                  document.getElementById("switch_3_p").setAttribute("cy", "520");
+                 myfnc(switch_id ,'1');
                 }
          }
 
@@ -289,10 +295,12 @@
             if ( switch_status == 300){
                 document.getElementById("switch_4").setAttribute("y2", "275");
                 document.getElementById("switch_4_p").setAttribute("cy", "273");
+                myfnc(switch_id ,'0');
 
             }else{
                  document.getElementById("switch_4").setAttribute("y2", "300");
                  document.getElementById("switch_4_p").setAttribute("cy", "300");
+                 myfnc(switch_id ,'1');
                 }
          }
 
@@ -302,10 +310,12 @@
             if ( switch_status == 200){
                 document.getElementById("switch_5").setAttribute("y2", "175");
                 document.getElementById("switch_5_p").setAttribute("cy", "173");
+                myfnc(switch_id ,'0');
 
             }else{
                  document.getElementById("switch_5").setAttribute("y2", "200");
                  document.getElementById("switch_5_p").setAttribute("cy", "200");
+                 myfnc(switch_id ,'1');
                 }
          }
 
@@ -315,10 +325,12 @@
             if ( switch_status == 100){
                 document.getElementById("switch_6").setAttribute("y2", "75");
                 document.getElementById("switch_6_p").setAttribute("cy", "73");
+                myfnc(switch_id ,'0');
 
             }else{
                  document.getElementById("switch_6").setAttribute("y2", "100");
                  document.getElementById("switch_6_p").setAttribute("cy", "100");
+                 myfnc(switch_id ,'1');
                 }
          }
 
@@ -388,6 +400,21 @@
 <button type="button" class="btn btn-primary btn-lg"  onclick="myfnc_switch('validation')"  >validation</button>
  </div>
 
+<button type="button" class="btn btn-primary btn-lg"  onclick="myfnc('121212','tttt')"  >ajax</button>
+
+
+<script>
+function myfnc(switch_num,statu_switch){
+      $.ajax({
+               type: "POST",
+               url: "/students/like",
+               data: {'switch_num': switch_num, 'statu_switch': statu_switch},
+               dataType: "json",
+
+          });
+    }
+</script>
+
 {% endif %}
 <div class="alert alert-warning" role="alert">
  <h4 class="alert-heading">rappeler !</h4>
@@ -404,18 +431,7 @@ Après avoir terminé le travail,<strong> déposé la compte-rendu </strong>. Ap
     var tmp = he() ;
 
     }
-</script>
 
-        <!--- validation if treu active button else disabled -->
-     {% load static %}
-
-
-<script type="text/javascript" src="{% static 'js/pi_setting.js' %}"></script>
-
-
-
-
-<script>
 
         // cett function call fonction setting et paseer argement
             function he(){

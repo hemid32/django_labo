@@ -8,6 +8,8 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from ..decorators import student_required
@@ -308,3 +310,19 @@ def take_quiz(request, pk):
 
 
 """
+
+
+@login_required
+@require_POST
+@csrf_exempt
+def like(request):
+    if request.method == 'POST':
+        print('444444444444444444')
+
+        data = request.body
+        print(data)
+
+
+    ctx = {'likes_count': 'rt', 'message':'ffffff'}
+    # use mimetype instead of content_type if django < 5
+    return HttpResponse(json.dumps(ctx), content_type='application/json')
