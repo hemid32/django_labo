@@ -51,10 +51,13 @@
     </div>
   </div>
 <!-- ana ajotithem  -->
-<dialog id="addForm" style="visibility: hidden;">
-    <form action="{% url 'teachers:quiz_results' quiz.pk %}" method="post" >
+<dialog id="addForm" style="visibility: hidden;"   >
+    <form action="{% url 'teachers:quiz_results' quiz.pk %}" method="post" enctype="multipart/form-data" >
        <input id="addFormid2" type="hidden" id="custId" name="std_user_Id" value="0">
        <input id="addFormid3" type="hidden" id="cust" name="TP_Id" value="0">
+        <label for="myfile">Correction:</label>
+        <input type="file" id="myfile" name="myfile">
+
 
 
     {% csrf_token %}

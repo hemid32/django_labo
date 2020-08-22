@@ -342,3 +342,20 @@ def like(request):
     ctx = {'likes_count': 'rt', 'message':'ffffff'}
     # use mimetype instead of content_type if django < 5
     return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+
+@login_required
+def pdf_corect(request):
+    #print(all_postes_.fiche_tp)
+    p = request.GET.get('date')
+    #file_path = os.path.join(settings.MEDIA_ROOT, all_postes_.fiche_tp)
+    your_media_root = settings.MEDIA_ROOT #/root/Desktop/testdjangoschool/src/django_school/media
+
+    path_pdf =  your_media_root  + '/' + str(p)
+
+    #print(your_media_root)
+    try:
+        return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
+    except FileNotFoundError:
+        raise Http404('not found')

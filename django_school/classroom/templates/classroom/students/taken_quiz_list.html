@@ -6,9 +6,10 @@
     <table class="table mb-0">
       <thead>
         <tr>
-          <th>nome TP</th>
-          <th>module</th>
+          <th>Titre TP</th>
+          <th>Matière</th>
           <th>date</th>
+          <th>correction</th>
           <th>note</th>
         </tr>
       </thead>
@@ -18,13 +19,19 @@
             <td>{{ taken_quiz.quiz.name }}</td>
             <td>{{ taken_quiz.quiz.module }}</td>
             <td>{{ taken_quiz.date}}</td>
+
             {% if taken_quiz.score == 100.0  %}
             <td> en cours...</td>
+              <td> en cours...</td>
+
 
             {% endif  %}
             {% if taken_quiz.score != 100.0  %}
 
+
+            <td>  <a href="{%  url 'students:pdf_corect_ens' %}?date={{ taken_quiz.correction_TP_ensegn }}" target="_blank"> coreection  </a>  </td>
             <td>{{ taken_quiz.score }}</td>
+
             {% endif  %}
 
           </tr>

@@ -95,6 +95,7 @@ class TakenQuiz(models.Model):
     score = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
     compte_rendu = models.FileField(upload_to='uploads_tp/')
+    correction_TP_ensegn  = models.FileField(upload_to='uploads_tp/')
 
 
 

@@ -159,10 +159,11 @@ class QuizResultsView(FormMixin,DetailView):
         #print('POOOOOOOOOOOOOOOOOOOOOST')
 
         self.object = self.get_object()
-        form = self.get_form()
+        form = self.get_form( )
         note = request.POST['note']
         ID_std = request.POST['std_user_Id']
         ID_TP = request.POST['TP_Id']
+        file_correction_ens = request.FILES['myfile']
         print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note ,ID_std  , ID_TP)
         if form.is_valid():
             #return self.form_valid(form)
@@ -178,6 +179,8 @@ class QuizResultsView(FormMixin,DetailView):
             t = TakenQuiz.objects.get(pk = ID_TP , student = ID_std )
             print('student ============ ', t.score)
             t.score = note  # change field
+            t.correction_TP_ensegn = file_correction_ens
+
             t.save()  # this will update only
 
             return redirect('teachers:quiz_results' ,quiz.pk)
