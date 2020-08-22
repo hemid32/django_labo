@@ -12,6 +12,10 @@ def create_subjects(apps, schema_editor):
     Subject.objects.create(name='electrotechnique', color='#ffc107')
 
 
+
+
+
+
 class Migration(migrations.Migration):
 
     dependencies = [

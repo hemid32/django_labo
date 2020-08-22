@@ -54,7 +54,10 @@ class QuizCreateView(CreateView):
     fields = ('name', 'subject','type_tp', 'module')
     template_name = 'classroom/teachers/quiz_add_form.html'
 
+
+
     def form_valid(self, form):
+
         quiz = form.save(commit=False)
         quiz.owner = self.request.user
         quiz.save()
@@ -66,11 +69,24 @@ class QuizCreateView(CreateView):
 class QuizUpdateView(UpdateView):
     model = Quiz
     fields = ('name', 'subject', 'type_tp' , 'module' )
+
+    '''
+    def get_form(self, form_class= Quiz):
+        form = form_class()
+        form.fields['subject'].label = "Primary purpose/business use"
+        #form.fields['secondary_purpose_business_uses'].label = "Secondary purpose/business uses"
+
+        return form
+    '''
+
     context_object_name = 'quiz'
     template_name = 'classroom/teachers/quiz_change_form.html'
 
+
+
     def get_context_data(self, **kwargs):
         kwargs['questions'] = self.get_object().questions.annotate(answers_count=Count('answers'))
+        #self.fields['subject'].label = 'classe'
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
@@ -83,6 +99,8 @@ class QuizUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('teachers:quiz_change', kwargs={'pk': self.object.pk})
+
+
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
@@ -207,6 +225,7 @@ def question_change(request, quiz_pk, question_pk):
     # change its details and also only questions that belongs to this
     # specific quiz can be changed via this url (in cases where the
     # user might have forged/player with the url params.
+
     quiz = get_object_or_404(Quiz, pk=quiz_pk, owner=request.user)
     question = get_object_or_404(Question, pk=question_pk, quiz=quiz)
 

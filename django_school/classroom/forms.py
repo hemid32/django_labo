@@ -70,6 +70,13 @@ class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
         fields = ('fiche_tp','description')
+    """
+    def __init__(self, *args, **kwargs):
+        super(QuestionForm, self).__init__(*args, **kwargs)
+        self.fields['Subject'].label  = 'classe'
+    """
+
+
 
 
 class BaseAnswerInlineFormSet(forms.BaseInlineFormSet):
@@ -93,8 +100,6 @@ class TakeQuizForm(forms.ModelForm):
         widget=forms.RadioSelect(),
         required=True,
         empty_label=None)
-
-
 
     class Meta:
         model = StudentAnswer

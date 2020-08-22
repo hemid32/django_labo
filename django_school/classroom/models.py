@@ -25,17 +25,18 @@ class Subject(models.Model):
 
 
 class Quiz(models.Model):
+    #enabled = models.BooleanField(verbose_name=_('enabled'))
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quizzes')
-    name = models.CharField(max_length=255 , default='nome TP')
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='quizzes')
+    name = models.CharField(max_length=255 , default='Titre' , verbose_name= 'Titre TP',)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='quizzes', verbose_name= 'les filières',)
+
     type_tp_posible = (
-        ('RC', 'RC'),
-        ('R', 'R'),
-        ('RL', 'RL'),
+        ('redressement et filtrage ', 'redressement et filtrage '),
+        ('filtrage RC', 'filtrage RC'),
     )
-    type_tp = models.CharField(max_length=6 ,choices=type_tp_posible)
-    description = models.TextField('description', max_length=500)
-    module = models.CharField(max_length=255, default='module')
+    type_tp = models.CharField(max_length=500 ,choices=type_tp_posible , verbose_name= 'Type de circuit électrique')
+    description = models.TextField( max_length=500 , verbose_name= 'Description de TP ')
+    module = models.CharField(max_length=255, default='Matière' , verbose_name= 'Matière' )
 
 
 
@@ -43,14 +44,17 @@ class Quiz(models.Model):
 
 
     def __str__(self):
+        labels = {
+            "subject": "Embed"
+        }
         return self.name
 
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='questions')
     text = models.CharField('Question', max_length=255)
-    description = models.TextField('description' , max_length=500)
-    fiche_tp = models.FileField(upload_to='uploads_tp/')
+    description = models.TextField( max_length=500 ,  verbose_name= 'Description de TP ')
+    fiche_tp = models.FileField(upload_to='uploads_tp/' , verbose_name= 'Compte-rendu')
 
 
     def __str__(self):
