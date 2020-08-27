@@ -22,8 +22,12 @@ import requests as RG
 from django.contrib.sessions.models import Session
 import subprocess
 import json
+from pickle import dump, load, Unpickler
+from datetime import datetime, timedelta
+
 #
 from requests import get
+import pickle
 
 
 
@@ -108,58 +112,125 @@ def take_quiz(request, pk):
     progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = unanswered_questions.first()
     print(request.user.pk)
-    print('student.pk ====', student.pk)
+    print('student.pk ==== ', student.pk)
+    ####" get path fiche.bin ####
+    your_media_root = settings.MEDIA_ROOT  # /root/Desktop/testdjangoschool/src/django_school/media
+
+    path_bin = your_media_root + '/' + 'fiche.bin'
+
+    f = open(path_bin, 'rb')
+    m1 = load(f)
+    #m1 = '0111111'
+    f.close()
+    print(m1)
+    print(request.user.pk)
+
+    if (m1[0] == '0'  or  m1[4] == str(request.user.pk)) or (datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') < datetime.now() ) and (m1[1] != str(request.user.pk)):
+        #with open(path_bin, 'wb') as f:
+            #dump((['0','ID_usr_block',  'time_in' ,'time_out' , 'ID_usr_current' ]), f)
+        now = datetime.now()
+        time_init = now.strftime("%b %d %Y %H:%M:%S")
+        time_out_ = now +  timedelta(seconds = 30 * 5 )
+        time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
+        #print('time init ====' , time_init)
+        #print('m1[3] time out fiche bin  ' , m1[3])
+        #print(time_init < m1[3])
+        #print(datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') -now ) #"%b %d %Y %H:%M:%S.%f"
+        if not (time_init < m1[3]) :
+            print('time oveeeeeeer')
+        print(m1)
+        if m1[4] != str(request.user.pk)  :
+            f = open(path_bin, 'wb')
+            dump((['1', 'ID_usr_block', str(now), str(time_out_), str(request.user.pk)]), f)
+            print('done --------- ')
+            f.close()
+            #time_left = datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
+        if m1[4] == str(request.user.pk) :
+            if  (datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') < now ) :
+                print('not time_init < m1[3]')
+                print(time_init  < m1[3])
+                f = open(path_bin, 'wb')
+                dump((['0', str(request.user.pk), '0',str(time_out_),'0']), f)
+                f.close()
+                messages.warning(request, 'time is over')
+                return redirect('students:quiz_list')
+        #Unpickler(f).load()
+        print(time_init)
+        print(time_out)
+        now = datetime.now()
+        #time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
+
+        time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
+        time_left_scnd = time_left.seconds
+
+        print(time_left_scnd)
+        if time_left_scnd > 3000 :
+            time_left_scnd = 30 * 5
+
+            #
+        #f.close()
 
 
-    if request.method == 'POST':
-        #form = TakeQuizForm(question=question, data=request.POST)
-        form = correction_TP_Form(request.POST , request.FILES)
 
 
 
 
-        if form.is_valid() :
+        if request.method == 'POST':
+            #form = TakeQuizForm(question=question, data=request.POST)
+            form = correction_TP_Form(request.POST , request.FILES)
 
 
 
-            with transaction.atomic():
-                student_answer = form.save(commit=False)
-                #f = correction_TP.objects.get(user = request.user)
-                #f = 'hemidi benameur'
-                #print('fffff=', 'hemidi/ol')
-                #student_answer.student = student
-                #print('student.pk ====' ,student.pk )
-                student_answer.id_tp =  question.pk
-                student_answer.id_user =  student.pk
 
-                student_answer.save()
-                if student.get_unanswered_questions(quiz).exists() and False:
-                    return redirect('students:take_quiz', pk)
-                else:
-                    #correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
-
-                    h = correction_TP.objects.get(id_tp = question.pk , id_user = student.pk )
-                    print('correction_TP.objects.get() ==== ',h.compte_rendu)
-                    #f = correction_TP.objects.get(user=student.user)
-
-                    score = 100.0
-                    TakenQuiz.objects.create(student=student, quiz=quiz, score=score ,compte_rendu = h.compte_rendu  )
+            if form.is_valid() :
+                f = open(path_bin, 'wb')
+                dump((['0', '0', '0', str(time_out_), '0']), f)
+                f.close()
 
 
-                    if score < 50.0:
-                        messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
+
+                with transaction.atomic():
+                    student_answer = form.save(commit=False)
+                    #f = correction_TP.objects.get(user = request.user)
+                    #f = 'hemidi benameur'
+                    #print('fffff=', 'hemidi/ol')
+                    #student_answer.student = student
+                    #print('student.pk ====' ,student.pk )
+                    student_answer.id_tp =  question.pk
+                    student_answer.id_user =  student.pk
+
+                    student_answer.save()
+                    if student.get_unanswered_questions(quiz).exists() and False:
+                        return redirect('students:take_quiz', pk)
                     else:
-                        messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
-                    return redirect('students:quiz_list')
-    else:
-        form = correction_TP_Form()
+                        #correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
 
-    return render(request, 'classroom/students/take_quiz_form.html', {
-        'quiz': quiz,
-        'question': question,
-        'form': form,
-        'progress': progress
-    })
+                        h = correction_TP.objects.get(id_tp = question.pk , id_user = student.pk )
+                        print('correction_TP.objects.get() ==== ',h.compte_rendu)
+                        #f = correction_TP.objects.get(user=student.user)
+
+                        score = 100.0
+                        TakenQuiz.objects.create(student=student, quiz=quiz, score=score ,compte_rendu = h.compte_rendu  )
+
+
+                        if score < 50.0:
+                            messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
+                        else:
+                            messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
+                        return redirect('students:quiz_list')
+        else:
+            form = correction_TP_Form()
+
+        return render(request, 'classroom/students/take_quiz_form.html', {
+            'quiz': quiz,
+            'question': question,
+            'form': form,
+            'progress': progress ,
+            'time_left' : time_left_scnd,
+        })
+    else:
+        messages.warning(request, 'Please come back after')
+        return redirect('students:quiz_list')
 
 
 
