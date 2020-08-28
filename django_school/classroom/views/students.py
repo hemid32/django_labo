@@ -128,9 +128,11 @@ def take_quiz(request, pk):
     if (m1[0] == '0'  or  m1[4] == str(request.user.pk)) or (datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') < datetime.now() ) and (m1[1] != str(request.user.pk)):
         #with open(path_bin, 'wb') as f:
             #dump((['0','ID_usr_block',  'time_in' ,'time_out' , 'ID_usr_current' ]), f)
+        temps_TP =  Quiz.objects.get(pk = pk)
+        print('temps_TP ===== ',temps_TP.Temps_TP)
         now = datetime.now()
         time_init = now.strftime("%b %d %Y %H:%M:%S")
-        time_out_ = now +  timedelta(seconds = 30 * 5 )
+        time_out_ = now +  timedelta(seconds = 60 * int(temps_TP.Temps_TP)  )
         time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
         #print('time init ====' , time_init)
         #print('m1[3] time out fiche bin  ' , m1[3])
@@ -164,8 +166,8 @@ def take_quiz(request, pk):
         time_left_scnd = time_left.seconds
 
         print(time_left_scnd)
-        if time_left_scnd > 3000 :
-            time_left_scnd = 30 * 5
+        if time_left_scnd > int(temps_TP.Temps_TP) * 60  :
+            time_left_scnd =  60 * int(temps_TP.Temps_TP)
 
             #
         #f.close()

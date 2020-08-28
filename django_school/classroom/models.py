@@ -37,11 +37,7 @@ class Quiz(models.Model):
     type_tp = models.CharField(max_length=500 ,choices=type_tp_posible , verbose_name= 'Type de circuit électrique')
     description = models.TextField( max_length=500 , verbose_name= 'Description de TP ')
     module = models.CharField(max_length=255, default='Matière' , verbose_name= 'Matière' )
-
-
-
-
-
+    Temps_TP = models.IntegerField(default=5 , verbose_name= 'Temps de TP min')
 
     def __str__(self):
         labels = {
