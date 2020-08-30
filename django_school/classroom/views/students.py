@@ -14,7 +14,7 @@ from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from ..decorators import student_required
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm, correction_TP_Form
-from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP
+from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP, Planning_TP
 import os
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse, JsonResponse, HttpResponseRedirect
@@ -68,6 +68,7 @@ class QuizListView(ListView):
     context_object_name = 'quizzes'
     template_name = 'classroom/students/quiz_list.html'
 
+
     def get_queryset(self):
         student = self.request.user.student
         student_interests = student.interests.values_list('pk', flat=True)
@@ -76,7 +77,39 @@ class QuizListView(ListView):
             .exclude(pk__in=taken_quizzes) \
             .annotate(questions_count=Count('questions')) \
             .filter(questions_count__gt=0)
+        # Planning
+        #print('4444444444 ======= ',len(queryset))
+        #print(queryset)
+
+        for id  in queryset.values() :
+            id_tp = id['id']
+            #print(id_tp)
+            try:
+                pl = Planning_TP.objects.get(id_TP = id_tp , id_usr =  self.request.user.pk )
+
+            except:
+                pl = False
+
+            if pl == False :
+                # get time in finale
+                time_fn_final =  Planning_TP.objects.filter(id_TP = id_tp).values()
+                temps_tp  =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_TP']
+                time_in =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn']
+                time_fn =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn'] + + timedelta(minutes=60 * 12)
+                #print(time_in  , time_fn)
+                Planning_TP.objects.create(id_usr = self.request.user.pk , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
+
+            else :
+                #print('yesssssssss')
+                pass
+
+        # Planning
         return queryset
+    # contex pour Planning
+    def get_context_data(self, **kwargs):
+        context = super(QuizListView, self).get_context_data(**kwargs)  # get the default context data
+        context['time'] = Planning_TP.objects.filter(id_usr=self.request.user.pk ).values()  # add extra field to the context
+        return context
 
 
 @method_decorator([login_required, student_required], name='dispatch')
@@ -114,63 +147,49 @@ def take_quiz(request, pk):
     print(request.user.pk)
     print('student.pk ==== ', student.pk)
     ####" get path fiche.bin ####
-    your_media_root = settings.MEDIA_ROOT  # /root/Desktop/testdjangoschool/src/django_school/media
 
-    path_bin = your_media_root + '/' + 'fiche.bin'
+    #with open(path_bin, 'wb') as f:
+        #dump((['0','ID_usr_block',  'time_in' ,'time_out' , 'ID_usr_current' ]), f)
+    temps_TP =  Quiz.objects.get(pk = pk)
+    #now = datetime.now()
+    #time_init = now.strftime("%b %d %Y %H:%M:%S")
+    #time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
+    #print('time init ====' , time_init)
+    #print('m1[3] time out fiche bin  ' , m1[3])
+    #print(time_init < m1[3])
+    #print(datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') -now ) #"%b %d %Y %H:%M:%S.%f"
 
-    f = open(path_bin, 'rb')
-    m1 = load(f)
-    #m1 = '0111111'
-    f.close()
-    print(m1)
-    print(request.user.pk)
+    #Unpickler(f).load()
 
-    if (m1[0] == '0'  or  m1[4] == str(request.user.pk)) or (datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') < datetime.now() ) and (m1[1] != str(request.user.pk)):
-        #with open(path_bin, 'wb') as f:
-            #dump((['0','ID_usr_block',  'time_in' ,'time_out' , 'ID_usr_current' ]), f)
-        temps_TP =  Quiz.objects.get(pk = pk)
-        print('temps_TP ===== ',temps_TP.Temps_TP)
-        now = datetime.now()
-        time_init = now.strftime("%b %d %Y %H:%M:%S")
-        time_out_ = now +  timedelta(seconds = 60 * int(temps_TP.Temps_TP)  )
-        time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
-        #print('time init ====' , time_init)
-        #print('m1[3] time out fiche bin  ' , m1[3])
-        #print(time_init < m1[3])
-        #print(datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') -now ) #"%b %d %Y %H:%M:%S.%f"
-        if not (time_init < m1[3]) :
-            print('time oveeeeeeer')
-        print(m1)
-        if m1[4] != str(request.user.pk)  :
-            f = open(path_bin, 'wb')
-            dump((['1', 'ID_usr_block', str(now), str(time_out_), str(request.user.pk)]), f)
-            print('done --------- ')
-            f.close()
-            #time_left = datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
-        if m1[4] == str(request.user.pk) :
-            if  (datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') < now ) :
-                print('not time_init < m1[3]')
-                print(time_init  < m1[3])
-                f = open(path_bin, 'wb')
-                dump((['0', str(request.user.pk), '0',str(time_out_),'0']), f)
-                f.close()
-                messages.warning(request, 'time is over')
-                return redirect('students:quiz_list')
-        #Unpickler(f).load()
-        print(time_init)
-        print(time_out)
-        now = datetime.now()
-        #time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
+    #time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
 
-        time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
-        time_left_scnd = time_left.seconds
+    #time_left =  datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f') - now
 
-        print(time_left_scnd)
-        if time_left_scnd > int(temps_TP.Temps_TP) * 60  :
-            time_left_scnd =  60 * int(temps_TP.Temps_TP)
+    ## Planning
+    #datetime.strptime(m1[3], '%Y-%m-%d %H:%M:%S.%f')
 
-            #
-        #f.close()
+    Planning  =  Planning_TP.objects.get(id_usr = request.user.pk , id_TP = pk)
+    print(Planning.time_in.strftime("%b %d %Y %H:%M:%S"))
+
+    if datetime.strptime(Planning.time_in.strftime("%Y-%m-%d %H:%M:%S.%f"), '%Y-%m-%d %H:%M:%S.%f') < datetime.now() and datetime.strptime(Planning.time_fn.strftime("%Y-%m-%d %H:%M:%S.%f"), '%Y-%m-%d %H:%M:%S.%f') > datetime.now() :
+
+
+
+        time_left_scnd = 60 * Planning.time_TP
+
+
+        '''
+        # pout activer timing 
+        
+        
+        '''
+
+
+
+        ## Planning
+
+
+
 
 
 
@@ -185,9 +204,7 @@ def take_quiz(request, pk):
 
 
             if form.is_valid() :
-                f = open(path_bin, 'wb')
-                dump((['0', '0', '0', str(time_out_), '0']), f)
-                f.close()
+
 
 
 
@@ -230,9 +247,10 @@ def take_quiz(request, pk):
             'progress': progress ,
             'time_left' : time_left_scnd,
         })
-    else:
+    else :
         messages.warning(request, 'Please come back after')
         return redirect('students:quiz_list')
+
 
 
 

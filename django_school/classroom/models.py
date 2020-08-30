@@ -118,6 +118,14 @@ class evaluation_module(models.Model):
     note = models.FloatField(default=0)
     id_tp = models.IntegerField(default=0)
 
+class Planning_TP(models.Model) :
+    id_TP = models.IntegerField()
+    id_usr = models.IntegerField()
+    time_in = models.DateTimeField()
+    time_fn = models.DateTimeField()
+    time_TP = models.IntegerField()
+
+
 
 
 

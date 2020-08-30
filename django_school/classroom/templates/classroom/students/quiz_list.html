@@ -9,6 +9,7 @@
           <th>Title TP</th>
           <th>module</th>
           <th></th>
+          <th>temps</th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,16 @@
           <tr>
             <td class="align-middle">{{ quiz.name }}</td>
             <td class="align-middle">{{ quiz.module }} </td>
+            {%for time_ in time %}
+            {% if time_.id_TP == quiz.pk %}
+            <td class="align-middle">{{ time_.time_in }} </td>
+            <td class="align-middle"> à  </td>
+            <td class="align-middle">à {{ time_.time_fn }} </td>
+
+            {% endif %}
+            {% endfor %}
+
+
             <td class="text-right">
               <a href="{% url 'students:take_quiz' quiz.pk %}" class="btn btn-primary">commencer TP</a>
             </td>

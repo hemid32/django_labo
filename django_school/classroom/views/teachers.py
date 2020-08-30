@@ -12,10 +12,11 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm, evaluation_form
-from ..models import Answer, Question, Quiz, User, TakenQuiz
+from ..models import Answer, Question, Quiz, User, TakenQuiz, Planning_TP, Student
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse, HttpResponseForbidden
 from django.views.generic.edit import FormMixin
+from datetime import datetime, timedelta
 
 
 class TeacherSignUpView(CreateView):
@@ -56,11 +57,34 @@ class QuizCreateView(CreateView):
 
 
 
+
+
+
+
     def form_valid(self, form):
+
 
         quiz = form.save(commit=False)
         quiz.owner = self.request.user
         quiz.save()
+        #Plannig
+        #usr_id = User.objects.filter(is_student=True).values('id')
+        student  =  Student.objects.filter(interests = quiz.subject).values('user_id')
+        print(student)
+
+        ta = 0
+        for i in student :
+            # print(i['id'])
+            time_in = datetime.now() + timedelta(minutes= 60*ta)
+            time_fn = time_in + timedelta(minutes=60*12)
+            temps_tp = quiz.Temps_TP
+            id_usr = i['user_id']
+            id_tp = quiz.pk
+            print(time_in, time_fn, id_usr , id_tp , temps_tp )
+            Planning_TP.objects.create(id_usr = id_usr , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
+            #Planning_TP.save()
+            ta += 12
+        #Planning
         messages.success(self.request, 'The quiz was created with success! Go ahead and add some questions now.')
         return redirect('teachers:quiz_change', quiz.pk)
 
@@ -134,8 +158,8 @@ class QuizResultsView(FormMixin,DetailView):
 
     def get_context_data(self, **kwargs):
         quiz = self.get_object()
-
-
+        Planning =Planning_TP.objects.all()
+        student = Student.objects.all()
         taken_quizzes = quiz.taken_quizzes.select_related('student__user').order_by('-date')
         total_taken_quizzes = taken_quizzes.count()
         quiz_score = quiz.taken_quizzes.aggregate(average_score=Avg('compte_rendu'))
@@ -143,7 +167,9 @@ class QuizResultsView(FormMixin,DetailView):
             'taken_quizzes': taken_quizzes,
             'total_taken_quizzes': total_taken_quizzes,
             'quiz_score': quiz_score,
-            'form': evaluation_form(initial={'post': self.object})
+            'form': evaluation_form(initial={'post': self.object}) ,
+            'planning' : Planning ,
+            'student' : student ,
         }
 
         kwargs.update(extra_context)

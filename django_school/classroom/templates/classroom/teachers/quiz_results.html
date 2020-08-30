@@ -50,6 +50,44 @@
       Total respondents: <strong>{{ total_taken_quizzes }}</strong>
     </div>
   </div>
+<!-- planinng -->
+
+
+<div class="card">
+    <div class="card-header">
+      <strong>Calendrier</strong>
+    </div>
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>L'étudiant</th>
+          <th>Temps</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pln in planning %}
+          <tr>
+             {% if  pln.id_TP ==  quiz.pk %}
+              {% for std in student  %}
+                {% if  pln.id_usr == std.pk   %}
+                             <td>{{ std.user.first_name }}</td>
+                {% endif %}
+              {% endfor %}
+
+              <td>{{ pln.time_in }} </td>
+              <td>à</td>
+              <td> {{  pln.time_fn  }}</td>
+              {% endif %}
+
+
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+
+
 <!-- ana ajotithem  -->
 <dialog id="addForm" style="visibility: hidden;"   >
     <form action="{% url 'teachers:quiz_results' quiz.pk %}" method="post" enctype="multipart/form-data" >
