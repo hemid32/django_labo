@@ -175,14 +175,49 @@ def take_quiz(request, pk):
 
 
 
-        time_left_scnd = 60 * Planning.time_TP
 
 
-        '''
-        # pout activer timing 
-        
-        
-        '''
+
+
+        # pout activer timing  ( tomporery)
+        your_media_root = settings.MEDIA_ROOT  # /root/Desktop/testdjangoschool/src/django_school/media
+        path_bin = your_media_root + '/' + 'fiche.bin'
+        f = open(path_bin, 'rb')
+        m1 = load(f)
+        #m1 = [id_usr , time_in  , time_out , temps_tp]
+        f.close()
+        now = datetime.now()
+        time_now = now.strftime("%b %d %Y %H:%M:%S")
+        if (m1[0] != request.user.pk ) :
+            now = datetime.now()
+            time_init = now.strftime("%b %d %Y %H:%M:%S")
+            time_out_ = now +  timedelta(seconds = 60 * Planning.time_TP )
+            time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
+            f = open(path_bin, 'wb')
+            dump(([request.user.pk, time_init , time_out , Planning.time_TP ]), f)
+            time_left = datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
+            time_left_scnd = time_left.seconds
+            if time_left_scnd > 60 * Planning.time_TP :
+                time_left_scnd = 60 * Planning.time_TP
+            print('done --------- ')
+            f.close()
+        elif ( (int(m1[0]) == int(request.user.pk)) and (  now  >   datetime.strptime(m1[2],  '%b %d %Y %H:%M:%S') ) ):
+            #print( 'now ===== ', now)
+            #print( 'm2 ===== ' ,  m1[2])
+            #print( 'init ===== ' ,  m1[1])
+            #print(Planning.time_TP)
+            messages.warning(request, 'Le temps de TP  s\'est écoulé')
+            return redirect('students:quiz_list')
+        elif (m1[0] == request.user.pk) and ( now  < datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') )  :
+             time_left =  datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
+             time_left_scnd = time_left.seconds
+
+        # fine tompiratory  ( tomporery)
+            
+            
+    
+
+
 
 
 
