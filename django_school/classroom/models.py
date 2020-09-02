@@ -1,12 +1,20 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.html import escape, mark_safe
 
+from django.contrib.auth.models import AbstractUser
 
-class User(AbstractUser):
-    is_student = models.BooleanField(default=False)
+
+### admin ####
+# Unregister the provided model admin
+#admin.site.unregister(User )
+
+
+
+class User(AbstractUser ):
+    is_student = models.BooleanField(default=False )
     is_teacher = models.BooleanField(default=False)
-    date_of_birth = models.DateField(default='11/11/2111')
+    date_of_birth = models.DateField(default='1994-03-16')
+
     EQUIRED_FIELDS = ['date_of_birth']
 
 
@@ -127,8 +135,33 @@ class Planning_TP(models.Model) :
 
 
 
+###
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
+admin.site.register(User,UserAdmin)
+'''
+
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+
+###
+admin.site.register(User,UserAdmin)
+
+# Register out own model admin, based on the default UserAdmin
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    #form = UserChangeForm
+    #add_form = UserCreationForm
+    #EQUIRED_FIELDS = ['date_of_birth']
+    pass
 
 
+####
+
+'''
 
 
 
