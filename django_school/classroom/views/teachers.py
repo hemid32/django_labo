@@ -80,7 +80,7 @@ class QuizCreateView(CreateView):
             temps_tp = quiz.Temps_TP
             id_usr = i['user_id']
             id_tp = quiz.pk
-            print(time_in, time_fn, id_usr , id_tp , temps_tp )
+            #print(time_in, time_fn, id_usr , id_tp , temps_tp )
             Planning_TP.objects.create(id_usr = id_usr , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
             #Planning_TP.save()
             ta += 12

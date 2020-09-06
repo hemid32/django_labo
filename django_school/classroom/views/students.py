@@ -83,22 +83,37 @@ class QuizListView(ListView):
 
         for id  in queryset.values() :
             id_tp = id['id']
+            #print(id)
+            #print(id['Temps_TP'])
+
             #print(id_tp)
             try:
                 pl = Planning_TP.objects.get(id_TP = id_tp , id_usr =  self.request.user.pk )
+
 
             except:
                 pl = False
 
             if pl == False :
                 # get time in finale
-                time_fn_final =  Planning_TP.objects.filter(id_TP = id_tp).values()
-                temps_tp  =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_TP']
-                time_in =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn']
-                time_fn =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn'] + + timedelta(minutes=60 * 12)
-                #print(time_in  , time_fn)
-                Planning_TP.objects.create(id_usr = self.request.user.pk , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
-
+                if len(Planning_TP.objects.filter(id_TP = id_tp).values()) != 0 :
+                    time_fn_final =  Planning_TP.objects.filter(id_TP = id_tp).values()
+                    print(id_tp)
+                    temps_tp  =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_TP']
+                    time_in =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn']
+                    time_fn =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn'] + + timedelta(minutes=60 * 12)
+                    #print(time_in  , time_fn)
+                    Planning_TP.objects.create(id_usr = self.request.user.pk , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
+                else :
+                    time_in = datetime.now()
+                    time_fn = time_in + timedelta(minutes=60 * 12)
+                    temps_tp = id['Temps_TP']
+                    id_usr = self.request.user.pk
+                    id_tp = id_tp
+                    # print(time_in, time_fn, id_usr , id_tp , temps_tp )
+                    Planning_TP.objects.create(id_usr=id_usr, id_TP=id_tp, time_in=time_in, time_fn=time_fn,
+                                               time_TP=temps_tp)
+                    # Planning_TP.save()
             else :
                 #print('yesssssssss')
                 pass
@@ -188,30 +203,38 @@ def take_quiz(request, pk):
         f.close()
         now = datetime.now()
         time_now = now.strftime("%b %d %Y %H:%M:%S")
-        if (m1[0] != request.user.pk ) :
+
+        if (m1[0] != request.user.pk ) or ((m1[0] == request.user.pk) and (m1[4] != pk)) :
             now = datetime.now()
             time_init = now.strftime("%b %d %Y %H:%M:%S")
             time_out_ = now +  timedelta(seconds = 60 * Planning.time_TP )
             time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
             f = open(path_bin, 'wb')
-            dump(([request.user.pk, time_init , time_out , Planning.time_TP ]), f)
+            dump(([request.user.pk, time_init , time_out , Planning.time_TP , pk ]), f)
             time_left = datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
             time_left_scnd = time_left.seconds
             if time_left_scnd > 60 * Planning.time_TP :
                 time_left_scnd = 60 * Planning.time_TP
             print('done --------- ')
             f.close()
-        elif ( (int(m1[0]) == int(request.user.pk)) and (  now  >   datetime.strptime(m1[2],  '%b %d %Y %H:%M:%S') ) ):
+        elif ( (int(m1[0]) == int(request.user.pk)) and (  m1[4] == pk ) ):
             #print( 'now ===== ', now)
             #print( 'm2 ===== ' ,  m1[2])
             #print( 'init ===== ' ,  m1[1])
             #print(Planning.time_TP)
-            messages.warning(request, 'Le temps de TP  s\'est écoulé')
-            return redirect('students:quiz_list')
+            if now  >   datetime.strptime(m1[2],  '%b %d %Y %H:%M:%S') :
+                messages.warning(request, 'Le temps de TP  s\'est écoulé')
+                return redirect('students:quiz_list')
+            else :
+                time_left = datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
+                time_left_scnd = time_left.seconds
+
+
+        """
         elif (m1[0] == request.user.pk) and ( now  < datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') )  :
              time_left =  datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
              time_left_scnd = time_left.seconds
-
+        """
         # fine tompiratory  ( tomporery)
             
             

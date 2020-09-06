@@ -12,7 +12,7 @@ from classroom.models import (Answer, Question, Student, StudentAnswer,
 class TeacherSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('first_name', 'last_name', 'date_of_birth', 'username', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'date_of_birth', 'username','email', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -34,7 +34,7 @@ class StudentSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('first_name' ,'last_name' ,'date_of_birth' ,'username', 'password1', 'password2')
+        fields = ('first_name' ,'last_name' ,'date_of_birth' ,'username', 'email','password1', 'password2')
 
 
 
