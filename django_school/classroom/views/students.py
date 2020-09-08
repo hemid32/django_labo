@@ -14,7 +14,7 @@ from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from ..decorators import student_required
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm, correction_TP_Form
-from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP, Planning_TP
+from ..models import Quiz, Student, TakenQuiz, User, Question, correction_TP, Planning_TP, calcul_temps_TP_left
 import os
 from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse, JsonResponse, HttpResponseRedirect
@@ -28,6 +28,7 @@ from datetime import datetime, timedelta
 #
 from requests import get
 import pickle
+import pytz
 
 
 
@@ -195,40 +196,41 @@ def take_quiz(request, pk):
 
 
         # pout activer timing  ( tomporery)
-        your_media_root = settings.MEDIA_ROOT  # /root/Desktop/testdjangoschool/src/django_school/media
-        path_bin = your_media_root + '/' + 'fiche.bin'
-        f = open(path_bin, 'rb')
-        m1 = load(f)
-        #m1 = [id_usr , time_in  , time_out , temps_tp]
-        f.close()
-        now = datetime.now()
-        time_now = now.strftime("%b %d %Y %H:%M:%S")
+        #now = datetime.now()
+        try:
+            calcul_temps_TP = calcul_temps_TP_left.objects.get(id_usr=request.user.pk, id_TP=pk)
+            target = True
+            #print('target = True : ', calcul_temps_TP)
+        except :
+            target = False
+            #print('target = False : ')
 
-        if (m1[0] != request.user.pk ) or ((m1[0] == request.user.pk) and (m1[4] != pk)) :
-            now = datetime.now()
-            time_init = now.strftime("%b %d %Y %H:%M:%S")
-            time_out_ = now +  timedelta(seconds = 60 * Planning.time_TP )
-            time_out = time_out_.strftime("%b %d %Y %H:%M:%S")
-            f = open(path_bin, 'wb')
-            dump(([request.user.pk, time_init , time_out , Planning.time_TP , pk ]), f)
-            time_left = datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
-            time_left_scnd = time_left.seconds
-            if time_left_scnd > 60 * Planning.time_TP :
-                time_left_scnd = 60 * Planning.time_TP
-            print('done --------- ')
-            f.close()
-        elif ( (int(m1[0]) == int(request.user.pk)) and (  m1[4] == pk ) ):
-            #print( 'now ===== ', now)
-            #print( 'm2 ===== ' ,  m1[2])
-            #print( 'init ===== ' ,  m1[1])
-            #print(Planning.time_TP)
-            if now  >   datetime.strptime(m1[2],  '%b %d %Y %H:%M:%S') :
+        if target == True :
+            #time_now = now.strftime("%b %d %Y %H:%M:%S")
+            #print(calcul_temps_TP.time_out)
+            now = datetime.utcnow().replace(tzinfo=pytz.UTC)
+            #print(now)
+            if now > calcul_temps_TP.time_out:
                 messages.warning(request, 'Le temps de TP  s\'est écoulé')
                 return redirect('students:quiz_list')
-            else :
-                time_left = datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
+            else:
+                time_left = calcul_temps_TP.time_out - now
                 time_left_scnd = time_left.seconds
+        elif target == False :
+            #time_init = now
+            now = datetime.utcnow().replace(tzinfo=pytz.UTC)
+            time_init = now
+            time_out = now + timedelta(seconds=60 * Planning.time_TP)
+            calcul_temps_TP_left.objects.create(id_usr= request.user.pk, id_TP=pk, time_init=time_init, time_out=time_out,
+                                       time_TP=Planning.time_TP)
+            time_left = time_out - now
+            time_left_scnd = time_left.seconds
+            if time_left_scnd > 60 * Planning.time_TP:
+                time_left_scnd = 60 * Planning.time_TP
+            #print('done --------- ')
 
+
+        #time_now = now.strftime("%b %d %Y %H:%M:%S")
 
         """
         elif (m1[0] == request.user.pk) and ( now  < datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') )  :

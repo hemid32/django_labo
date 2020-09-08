@@ -132,6 +132,13 @@ class Planning_TP(models.Model) :
     time_in = models.DateTimeField()
     time_fn = models.DateTimeField()
     time_TP = models.IntegerField()
+class calcul_temps_TP_left(models.Model):
+    #dump(([request.user.pk, time_init , time_out , Planning.time_TP , pk ]), f)
+    id_TP = models.IntegerField()
+    id_usr = models.IntegerField()
+    time_init = models.DateTimeField()
+    time_out = models.DateTimeField()
+    time_TP = models.IntegerField()
 
 
 
