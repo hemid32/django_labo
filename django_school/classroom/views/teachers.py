@@ -189,9 +189,13 @@ class QuizResultsView(FormMixin,DetailView):
         note = request.POST['note']
         ID_std = request.POST['std_user_Id']
         ID_TP = request.POST['TP_Id']
-        file_correction_ens = request.FILES['myfile']
-        print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note ,ID_std  , ID_TP)
-        if form.is_valid():
+        try:
+            file_correction_ens = request.FILES['myfile']
+            file  = True
+        except :
+            file  = False
+        #print('yesssssssssssssssssssssssssssssssssss21212121221212121212122112211xxxxx',note ,ID_std  , ID_TP)
+        if form.is_valid() and file:
             #return self.form_valid(form)
 
             #note =  request.POST['note']
@@ -212,10 +216,14 @@ class QuizResultsView(FormMixin,DetailView):
             return redirect('teachers:quiz_results' ,quiz.pk)
 
         else:
+            if file == False:
+                print('11111111111111111111111222222222222222222*********')
+                messages.warning(self.request , 'Veuillez ajouter le fichier de correctif !!!')
             return self.form_invalid(form)
 
     def form_valid(self, form):
         form.save()
+
         return super(QuizResultsView, self).form_valid(form)
 
 
