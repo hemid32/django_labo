@@ -17,6 +17,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404, FileResponse, HttpResponseForbidden
 from django.views.generic.edit import FormMixin
 from datetime import datetime, timedelta
+from django.core.mail import EmailMultiAlternatives
 
 
 class TeacherSignUpView(CreateView):
@@ -60,7 +61,6 @@ class QuizCreateView(CreateView):
 
 
 
-
     def form_valid(self, form):
 
 
@@ -70,7 +70,7 @@ class QuizCreateView(CreateView):
         #Plannig
         #usr_id = User.objects.filter(is_student=True).values('id')
         student  =  Student.objects.filter(interests = quiz.subject).values('user_id')
-        print(student)
+
 
         ta = 0
         for i in student :
@@ -84,6 +84,27 @@ class QuizCreateView(CreateView):
             Planning_TP.objects.create(id_usr = id_usr , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
             #Planning_TP.save()
             ta += 12
+            # ##############   imail
+            student_email = User.objects.get(pk=i['user_id'])
+            email_student = student_email.email
+            # print('email =====', email_student)
+            try:
+                time_in = time_in.strftime("%b %d %Y %H:%M:%S")
+                time_fn = time_fn.strftime("%b %d %Y %H:%M:%S")
+                subject, from_email, to = 'Un nouveau travail pratique vous attend', 'laboratoir.elbayadh@gmail.com', email_student
+                text_content = 'This is an important message.'
+                html_content = '''<p>Bonjour <strong>{nome} {nome2}</strong> <br> Vous avez un nouveau travail appliqué qui vous attend .Selon le calendrier, votre date de réalisation  tp est : 
+                                                <br>Du <strong> {date_in} </strong>  Au <strong>{date_fn} </strong>  <br> Temps consacré aux travaux pratiques : 
+                                               <strong> {temps_TP} minit </strong> <br>  Assurez-vous de respecter le calendrier  <br> 
+                                                  <strong> LABTEC </strong></p>'''.format(nome=student_email.first_name, date_in=time_in,
+                                                                                          date_fn=time_fn, temps_TP=str(temps_tp),
+                                                                                          nome2=student_email.last_name)
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+            except:
+                pass
+            ################   imail
         #Planning
         messages.success(self.request, 'The quiz was created with success! Go ahead and add some questions now.')
         return redirect('teachers:quiz_change', quiz.pk)

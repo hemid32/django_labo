@@ -150,3 +150,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
 AUTH_USER_MODEL = 'classroom.User'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'laboratoir.elbayadh@gmail.com'
+EMAIL_HOST_PASSWORD = 'labtec@32@'
+EMAIL_PORT = 587
