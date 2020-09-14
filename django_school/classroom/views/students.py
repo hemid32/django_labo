@@ -8,6 +8,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
@@ -296,6 +297,9 @@ def take_quiz(request, pk):
                             messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
                         else:
                             messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
+                        messages.info(request, mark_safe(
+                            """ <a href='https://docs.google.com/forms/d/1vj-Tw9lid322ENg7AqYMKl7kqnQupfVgU0sIANoOTk8/edit?ts=5f5cc2bc&gxids=7628' target="blank" > اضغط هنا</a> الرجاء الاجابة على أسئلة هذا الاستبيان"""))
+
                         return redirect('students:quiz_list')
         else:
             form = correction_TP_Form()

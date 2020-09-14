@@ -7,6 +7,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView, TemplateView)
 
@@ -267,6 +268,7 @@ def question_add(request, pk):
             question.quiz = quiz
             question.save()
             messages.success(request, 'You may now add answers/options to the question.')
+            messages.info(request, mark_safe(""" <a href='https://docs.google.com/forms/d/e/1FAIpQLSceXGYcdnLMZlhFn6lZpfzpWKUlW9AJlENa-ze0mOyaOLsoRQ/viewform?usp=sf_link' target="blank" > اضغط هنا</a> الرجاء الاجابة على أسئلة هذا الاستبيان"""))
             return redirect('teachers:question_change', quiz.pk, question.pk)
     else:
         form = QuestionForm()

@@ -24,35 +24,5 @@
       </form>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-10">
-          <strong>informations TP</strong>
-        </div>
 
-      </div>
-    </div>
-    <div class="list-group list-group-flush list-group-formset">
-      {% for question in questions %}
-        <div class="list-group-item">
-          <div class="row">
-            <div class="col-10">
-              <a href="{% url 'teachers:question_change' quiz.pk question.pk %}">{{ question.text }}</a>
-            </div>
-            <div class="col-2">
-              {{ question.answers_count }}
-            </div>
-          </div>
-        </div>
-      {% empty %}
-        <div class="list-group-item text-center">
-          <p class="text-muted font-italic mb-0">Il faut ajouter description et compte-rendu <a href="{% url 'teachers:question_add' quiz.pk %}">Cliquez ici</a>.</p>
-        </div>
-      {% endfor %}
-    </div>
-    <div class="card-footer">
-      <a href="{% url 'teachers:question_add' quiz.pk %}" class="btn btn-primary btn-sm">SUIVANT</a>
-    </div>
-  </div>
 {% endblock %}
