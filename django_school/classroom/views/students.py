@@ -353,8 +353,13 @@ def pdf_view(request, id):
     path_pdf =  your_media_root  + '/' + str(all_postes_.fiche_tp)
 
     #print(your_media_root)
+    print(all_postes_.fiche_tp)
+    if '.docx' in  str(all_postes_.fiche_tp) :
+        type_fiche = 'application/docx'
+    else :
+        type_fiche = 'application/pdf'
     try:
-        return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
+        return FileResponse(open(path_pdf, 'rb'), content_type=type_fiche)
     except FileNotFoundError:
         raise Http404('not found')
 
