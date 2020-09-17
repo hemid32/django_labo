@@ -98,17 +98,18 @@ class QuizListView(ListView):
 
             if pl == False :
                 # get time in finale
+                print(id['temps_cal'])
                 if len(Planning_TP.objects.filter(id_TP = id_tp).values()) != 0 :
                     time_fn_final =  Planning_TP.objects.filter(id_TP = id_tp).values()
                     print(id_tp)
                     temps_tp  =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_TP']
                     time_in =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn']
-                    time_fn =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn'] + + timedelta(minutes=60 * 12)
+                    time_fn =  Planning_TP.objects.filter(id_TP = id_tp).values()[len(time_fn_final)-1]['time_fn'] +  timedelta(minutes=60 * int(id['temps_cal']))
                     #print(time_in  , time_fn)
                     Planning_TP.objects.create(id_usr = self.request.user.pk , id_TP = id_tp , time_in = time_in , time_fn = time_fn , time_TP = temps_tp)
                 else :
                     time_in = datetime.now()
-                    time_fn = time_in + timedelta(minutes=60 * 12)
+                    time_fn = time_in + timedelta(minutes=60 * int(id['temps_cal']))
                     temps_tp = id['Temps_TP']
                     id_usr = self.request.user.pk
                     id_tp = id_tp

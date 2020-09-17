@@ -46,6 +46,8 @@ class Quiz(models.Model):
     description = models.TextField( max_length=500 , verbose_name= 'Description de TP ')
     module = models.CharField(max_length=255, default='Matière' , verbose_name= 'Matière' )
     Temps_TP = models.IntegerField(default=5 , verbose_name= 'Temps de TP min')
+    temps_cal = models.IntegerField(default=12 , verbose_name= 'L interval temporel de calendrier (À l\'heure)')
+    email_cad = models.BooleanField(default=False ,verbose_name='Envoyer  des notifications   au étudiants  par email' )
 
     def __str__(self):
         labels = {
