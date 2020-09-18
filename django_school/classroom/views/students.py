@@ -525,3 +525,12 @@ def pdf_corect(request):
         return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
     except FileNotFoundError:
         raise Http404('not found')
+
+
+def initilisation_gpio() :
+    switchs = {'switch_1': '17', 'switch_2': '27', 'switch_3': '22',
+               'switch_4': '10', 'switch_5': '09', 'switch_6': '11',
+               'switch_7': '0000'}
+    for i  in switchs :
+        subprocess.call(['gpio', '-g', 'mode', switchs[i], 'out'])
+        subprocess.call(['gpio', '-g', 'write', switchs[i], '0'])
