@@ -1,3 +1,5 @@
+import os
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -116,7 +118,7 @@ class QuizCreateView(CreateView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizUpdateView(UpdateView):
     model = Quiz
-    fields = ('name', 'subject', 'type_tp' , 'module' )
+    fields = ('name', 'subject', 'type_tp' , 'module' ,  )
 
     '''
     def get_form(self, form_class= Quiz):
@@ -360,10 +362,19 @@ def pdf_corect(request):
     your_media_root = settings.MEDIA_ROOT #/root/Desktop/testdjangoschool/src/django_school/media
 
     path_pdf =  your_media_root  + '/' + str(p)
+    if '.docx' in str(p) :
+        filename = path_pdf
+        data = open(filename, "rb").read()
+        response = HttpResponse(data,
+                                content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(path_pdf)
+        return response
+
+    else :
 
     #print(your_media_root)
-    try:
-        return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
-    except FileNotFoundError:
-        raise Http404('not found')
+        try:
+            return FileResponse(open(path_pdf, 'rb'), content_type='application/pdf')
+        except FileNotFoundError:
+            raise Http404('not found')
 
