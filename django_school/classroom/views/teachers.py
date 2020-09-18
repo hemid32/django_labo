@@ -378,3 +378,58 @@ def pdf_corect(request):
         except FileNotFoundError:
             raise Http404('not found')
 
+
+@login_required
+@teacher_required
+def take_tp_teacher(request, pk):
+    print('Hemidi benameur')
+
+    # print(correction_TP.objects.all())
+    quiz = get_object_or_404(Quiz, pk=pk)
+    print('Hemidi benameur')
+
+
+    temps_TP = Quiz.objects.get(pk=pk)
+
+
+
+    # pout activer timing  ( tomporery)
+    now = datetime.now()
+
+    print(temps_TP.Temps_TP)
+
+    time_left_scnd = int(temps_TP.Temps_TP) *60
+        # print('done --------- ')
+
+    # time_now = now.strftime("%b %d %Y %H:%M:%S")
+
+    """
+    elif (m1[0] == request.user.pk) and ( now  < datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') )  :
+         time_left =  datetime.strptime(m1[2], '%b %d %Y %H:%M:%S') - now
+         time_left_scnd = time_left.seconds
+    """
+    # fine tompiratory  ( tomporery)
+
+    ## Planning
+    try:
+        quistion = Question.objects.get(quiz=quiz)
+    except :
+        print('yyyyyyyyyyyyy')
+        messages.warning(request, 'Vous n\'avez pas ajouté le compte-rendu et la description à ce TP !! Modifiez le problème. Jusqu\'à présent, le tp n\'est pas visible pour les étudiants.' )
+        return redirect('teachers:quiz_change_list')
+
+
+    #print(quistion.fiche_tp)
+    from  requests import get
+    ip = get('https://api.ipify.org').text
+
+
+
+
+    return render(request, 'classroom/teachers/take_tp_form.html', {
+        'quiz': quiz,
+        'time_left': time_left_scnd,
+        'question':quistion,
+        'urle': 'http://' + ip + ':5000/',
+
+    })

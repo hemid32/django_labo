@@ -146,9 +146,12 @@ class TakenQuizListView(ListView):
 @login_required
 @student_required
 def take_quiz(request, pk):
+    print('Hemidi benameur')
+
     #print(correction_TP.objects.all())
     quiz = get_object_or_404(Quiz, pk=pk)
     student = request.user.student
+    print('Hemidi benameur')
 
 
     if student.quizzes.filter(pk=pk).exists():
@@ -305,6 +308,8 @@ def take_quiz(request, pk):
         else:
             form = correction_TP_Form()
 
+        print(question.fiche_tp)
+
         return render(request, 'classroom/students/take_quiz_form.html', {
             'quiz': quiz,
             'question': question,
@@ -366,7 +371,7 @@ def pdf_view(request, id):
 
 
 @login_required
-@student_required
+#@student_required
 def get_vr(request, id , r):
     print(request.session.keys())
     session_key = request.session.session_key
