@@ -421,9 +421,12 @@ def take_tp_teacher(request, pk):
 
     #print(quistion.fiche_tp)
     from  requests import get
-    ip = get('https://api.ipify.org').text
+    try :
+        ip = get('https://api.ipify.org').text
+    except :
+        ip = '192.168.1.7'
 
-
+    print(ip)
 
 
     return render(request, 'classroom/teachers/take_tp_form.html', {
