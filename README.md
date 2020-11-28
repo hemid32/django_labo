@@ -1,4 +1,3 @@
-
 **Qu'est-ce qu'un projet LABTEC**
 
 Notre contribution consiste à développer un laboratoire distant par nos propre moyens
@@ -34,6 +33,26 @@ _**Serveur des instruments mesures**_ : Ce serveur partage l'image d'écran des 
  _**Instrument de mesure**_ :: Appareils de mesure avec ou sans serveur web intégré
 _**Carte TP**_ :  Constitué une circuit électronique et la matrice de commutation et commander via le serveur principal
 
+ **les diagrammes de modélisation UML**
+**_1- Diagramme de cas d’utilisation_**
+L’enseignant : Ajoutez toutes les informations sur le travail pratique. Et évaluation des étudiants
+-Etudiant : il s’agit de la personne effectuant le TP, dans le but d’atteindre des objectifs pédagogiques visés par ce TP.
+-Administrateur: il assure la maintenance du matériel utilisé et gérer les droit
+![VirtualLabUseCaseDiagram](https://user-images.githubusercontent.com/39880129/100521662-4c09af00-31a5-11eb-81ea-bef15b0b1903.png)
+
+**_2-diagramme de classe_**
+![VirutalLab_ClassDiagram](https://user-images.githubusercontent.com/39880129/100521719-8bd09680-31a5-11eb-94fe-602caa32fb01.png)
+
+_**3-Diagramme de séquence**_
+_inscription utilisateur_
+![Inscription_ utilisateur](https://user-images.githubusercontent.com/39880129/100521746-b4589080-31a5-11eb-9c1b-5a4efada6920.jpg)
+
+
+_réalisation tp étudiant_
+![Réalisation_TP_Etudiant](https://user-images.githubusercontent.com/39880129/100521755-d0f4c880-31a5-11eb-9924-5e139df38607.jpg)
+_**configuration tp enseignant**_
+![Configuration_TP_enseignant](https://user-images.githubusercontent.com/39880129/100521766-f08bf100-31a5-11eb-9622-87783287b517.jpg)
+
 _****_Flux de données du système  (serveur principal)_****_
 ![Nouveau Apresentação do Microsoft PowerPoint](https://user-images.githubusercontent.com/39880129/100521215-802fa080-31a2-11eb-9d7b-1ace0ed3f44d.jpg)
 
@@ -52,13 +71,13 @@ on a  développé ce serveur avec  l'utilisation de framework  Flask
 
 **Caractéristiques du laboratoire LABTEC**
 
-- [ ]  Multi-utilisateur
+- [x]  Multi-utilisateur
 
 - [ ] plateforme facile  à manipuler par les utilisateurs
 
-- [ ] Économique. Il n'a pas besoin d'appareils coûteux
+- [x] Économique. Il n'a pas besoin d'appareils coûteux
 
-- [ ] Open source. Et c'est évolutif
+- [x] Open source. Et c'est évolutif
 
 - [ ] permettre de développer et de réaliser des expériences sur des plate-forme et systèmes d'exploitation différents
 
@@ -81,6 +100,14 @@ on a  développé ce serveur avec  l'utilisation de framework  Flask
 ![7](https://user-images.githubusercontent.com/39880129/95535722-0e787900-09e1-11eb-9652-7f988a5735ae.png)
 ![8](https://user-images.githubusercontent.com/39880129/95535725-120c0000-09e1-11eb-9e35-dfe0e70f9d21.png)
 
+les mots clés
+labtec
+el baydh labtec 
+centre universitaire nour bachir el bayadh
+hemidi benameur 
+ laboratoire a distance
+remote lab
+benali gheith 
 
 **Pour plus d'informations, téléchargez le document suivant**
 [PFC.pdf](https://github.com/hemid32/django_labo/files/5352182/PFC.pdf)
