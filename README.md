@@ -1,3 +1,4 @@
+
 **Qu'est-ce qu'un projet LABTEC**
 
 Notre contribution consiste à développer un laboratoire distant par nos propre moyens
@@ -25,6 +26,50 @@ positionnant le point de mesure en différents endroits du circuit étudié. Les
 électriques sont dessinés à l'aide de l’outil SVG. l’ouverture et la fermeture des switch
 s’effectue en implémentant du javascripttandisque du côté serveur web nous utilisons
 l’'environnement Django.
+**Architecture cible de projet LABTEC**
+![Nouveau Apresentação do 11Microsoft PowerPoint](https://user-images.githubusercontent.com/39880129/100521084-c2a4ad80-31a1-11eb-8f35-db685817729e.jpg)
+
+**_Serveur principal_** : Le serveur principal du laboratoire. Il contient la base de données et toutes les opérations nécessaires pour gérer le système
+_**Serveur des instruments mesures**_ : Ce serveur partage l'image d'écran des instruments de mesure (pour notre système **)
+ _**Instrument de mesure**_ :: Appareils de mesure avec ou sans serveur web intégré
+_**Carte TP**_ :  Constitué une circuit électronique et la matrice de commutation et commander via le serveur principal
+
+_****_Flux de données du système  (serveur principal)_****_
+![Nouveau Apresentação do Microsoft PowerPoint](https://user-images.githubusercontent.com/39880129/100521215-802fa080-31a2-11eb-9d7b-1ace0ed3f44d.jpg)
+
+**Méthodologie de  création les utilisateurs**
+
+![Nouveau Apresentação do Microsoft PowerP1oint](https://user-images.githubusercontent.com/39880129/100521276-cedd3a80-31a2-11eb-858a-f6b7f803bc37.jpg)
+
+**Autorisations par utilisateur**
+![Nouveau Apresentaçã1o do Microsoft PowerPoint](https://user-images.githubusercontent.com/39880129/100521294-051aba00-31a3-11eb-8958-052f640f3aab.jpg)
+
+**Développement de Serveur des instruments mesures**
+on a  développé ce serveur avec  l'utilisation de framework  Flask 
+[code ici 
+](https://github.com/hemid32/flask_labo)
+![Nouveau Apresentação do Micr12osoft PowerPoint](https://user-images.githubusercontent.com/39880129/100521404-be798f80-31a3-11eb-871f-22e567217c09.jpg)
+
+**Caractéristiques du laboratoire LABTEC**
+
+- [ ]  Multi-utilisateur
+
+- [ ] plateforme facile  à manipuler par les utilisateurs
+
+- [ ] Économique. Il n'a pas besoin d'appareils coûteux
+
+- [ ] Open source. Et c'est évolutif
+
+- [ ] permettre de développer et de réaliser des expériences sur des plate-forme et systèmes d'exploitation différents
+
+- [ ]  Utiliser un seule langage de programmation pour gérer le serveur et contrôler le GPIO  (python) qui rend le système homogène et facile à maintenir
+
+- [ ] L'utilisation des technologies web modernes (Ajax, Django, Flask ,  Bootstrap ... etc). Facile et gratuit
+
+- [ ] Permettre d’utiliser un oscilloscope disponible (avec ou sans serveur web intégré)
+
+
+
 **Quelques photos de l'application**
 ![9](https://user-images.githubusercontent.com/39880129/95535655-e426bb80-09e0-11eb-9783-c4489680e0f2.png)
 ![1](https://user-images.githubusercontent.com/39880129/95535668-edb02380-09e0-11eb-81d8-0d1709ae9d5b.png)
@@ -39,3 +84,4 @@ l’'environnement Django.
 
 **Pour plus d'informations, téléchargez le document suivant**
 [PFC.pdf](https://github.com/hemid32/django_labo/files/5352182/PFC.pdf)
+
