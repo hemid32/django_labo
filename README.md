@@ -73,19 +73,19 @@ on a  développé ce serveur avec  l'utilisation de framework  Flask
 
 - [x]  Multi-utilisateur
 
-- [ ] plateforme facile  à manipuler par les utilisateurs
+- [x] plateforme facile  à manipuler par les utilisateurs
 
 - [x] Économique. Il n'a pas besoin d'appareils coûteux
 
 - [x] Open source. Et c'est évolutif
 
-- [ ] permettre de développer et de réaliser des expériences sur des plate-forme et systèmes d'exploitation différents
+- [x] permettre de développer et de réaliser des expériences sur des plate-forme et systèmes d'exploitation différents
 
-- [ ]  Utiliser un seule langage de programmation pour gérer le serveur et contrôler le GPIO  (python) qui rend le système homogène et facile à maintenir
+- [x]  Utiliser un seule langage de programmation pour gérer le serveur et contrôler le GPIO  (python) qui rend le système homogène et facile à maintenir
 
-- [ ] L'utilisation des technologies web modernes (Ajax, Django, Flask ,  Bootstrap ... etc). Facile et gratuit
+- [x] L'utilisation des technologies web modernes (Ajax, Django, Flask ,  Bootstrap ... etc). Facile et gratuit
 
-- [ ] Permettre d’utiliser un oscilloscope disponible (avec ou sans serveur web intégré)
+- [x] Permettre d’utiliser un oscilloscope disponible (avec ou sans serveur web intégré)
 
 
 
